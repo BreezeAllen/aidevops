@@ -172,7 +172,9 @@ find providers/ -name "*.sh" -exec shellcheck {} \;
 - SC2155: Separate declare and assign
 - SC2015: Avoid `A && B || C` patterns
 
-#### **CodeRabbit CLI Integration (AI-Powered Reviews)**
+#### **Comprehensive Quality CLI Integration (AI-Powered Analysis)**
+
+**🔍 CodeRabbit CLI - AI-Powered Code Review:**
 ```bash
 # Install CodeRabbit CLI
 bash .agent/scripts/coderabbit-cli.sh install
@@ -182,16 +184,50 @@ bash .agent/scripts/coderabbit-cli.sh setup
 
 # Review current changes
 bash .agent/scripts/coderabbit-cli.sh review
-
-# Analyze specific files/directories
-bash .agent/scripts/coderabbit-cli.sh analyze providers/
 ```
 
-**CodeRabbit API Key Setup:**
+**📊 Codacy CLI v2 - Comprehensive Code Analysis:**
+```bash
+# Install Codacy CLI v2
+bash .agent/scripts/codacy-cli.sh install
+
+# Initialize project configuration
+bash .agent/scripts/codacy-cli.sh init
+
+# Run code analysis
+bash .agent/scripts/codacy-cli.sh analyze
+```
+
+**🔬 SonarScanner CLI - SonarQube Cloud Analysis:**
+```bash
+# Install SonarScanner CLI
+bash .agent/scripts/sonarscanner-cli.sh install
+
+# Initialize project configuration
+bash .agent/scripts/sonarscanner-cli.sh init
+
+# Run SonarQube analysis
+bash .agent/scripts/sonarscanner-cli.sh analyze
+```
+
+**🎛️ Unified Quality CLI Manager:**
+```bash
+# Install all quality CLIs
+bash .agent/scripts/quality-cli-manager.sh install all
+
+# Run analysis with all CLIs
+bash .agent/scripts/quality-cli-manager.sh analyze all
+
+# Check status of all CLIs
+bash .agent/scripts/quality-cli-manager.sh status all
+```
+
+**API Key Setup (Secure Local Configuration):**
+- **CodeRabbit**: Get from https://app.coderabbit.ai → Settings → API Keys
+- **Codacy**: Get from https://app.codacy.com → Account → API Tokens
+- **SonarCloud**: Get from https://sonarcloud.io/account/security/
 - **Never commit API keys** - Use local configuration only
-- **Get API key**: Visit https://app.coderabbit.ai → Settings → API Keys
-- **Organization**: Use `marcusquinn` GitHub organization key
-- **Local storage**: `~/.config/coderabbit/api_key` (secure permissions)
+- **Local storage**: Secure permissions (600) in user config directories
 
 #### **Shell Script Best Practices (MANDATORY PATTERNS)**
 

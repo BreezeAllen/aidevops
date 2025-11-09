@@ -194,24 +194,50 @@ run_shellcheck() {
     return 0
 }
 
-# Check CodeRabbit CLI integration
-check_coderabbit_cli() {
-    print_info "🤖 Checking CodeRabbit CLI Integration..."
+# Check AI-Powered Quality CLIs integration
+check_quality_clis() {
+    print_info "🤖 Checking AI-Powered Quality CLIs Integration..."
 
+    # CodeRabbit CLI
     local coderabbit_script=".agent/scripts/coderabbit-cli.sh"
-
-    if [[ ! -f "$coderabbit_script" ]]; then
+    if [[ -f "$coderabbit_script" ]]; then
+        if bash "$coderabbit_script" status > /dev/null 2>&1; then
+            print_success "CodeRabbit CLI: Integration ready"
+            print_info "Run: bash $coderabbit_script review (for local code review)"
+        else
+            print_info "CodeRabbit CLI: Available for setup"
+            print_info "Run: bash $coderabbit_script install && bash $coderabbit_script setup"
+        fi
+    else
         print_warning "CodeRabbit CLI script not found"
-        return 0
     fi
 
-    # Check if CodeRabbit CLI is available
-    if bash "$coderabbit_script" status > /dev/null 2>&1; then
-        print_success "CodeRabbit CLI: Integration ready"
-        print_info "Run: bash $coderabbit_script review (for local code review)"
+    # Codacy CLI
+    local codacy_script=".agent/scripts/codacy-cli.sh"
+    if [[ -f "$codacy_script" ]]; then
+        if bash "$codacy_script" status > /dev/null 2>&1; then
+            print_success "Codacy CLI: Integration ready"
+            print_info "Run: bash $codacy_script analyze (for local analysis)"
+        else
+            print_info "Codacy CLI: Available for setup"
+            print_info "Run: bash $codacy_script install && bash $codacy_script init"
+        fi
     else
-        print_info "CodeRabbit CLI: Available for setup"
-        print_info "Run: bash $coderabbit_script install && bash $coderabbit_script setup"
+        print_warning "Codacy CLI script not found"
+    fi
+
+    # SonarScanner CLI
+    local sonar_script=".agent/scripts/sonarscanner-cli.sh"
+    if [[ -f "$sonar_script" ]]; then
+        if bash "$sonar_script" status > /dev/null 2>&1; then
+            print_success "SonarScanner CLI: Integration ready"
+            print_info "Run: bash $sonar_script analyze (for SonarCloud analysis)"
+        else
+            print_info "SonarScanner CLI: Available for setup"
+            print_info "Run: bash $sonar_script install && bash $sonar_script init"
+        fi
+    else
+        print_warning "SonarScanner CLI script not found"
     fi
 
     return 0
@@ -238,7 +264,7 @@ main() {
     run_shellcheck || exit_code=1
     echo ""
 
-    check_coderabbit_cli
+    check_quality_clis
     echo ""
 
     # Final summary
