@@ -1,0 +1,61 @@
+---
+# Codacy configuration for AI-Assisted DevOps Framework
+# This configuration optimizes analysis for shell scripts and documentation
+
+engines:
+  # Enable shell script analysis
+  shellcheck:
+    enabled: true
+    exclude_paths:
+      - 'docs/**'
+      - '.agent/**'
+      - 'configs/**'
+  
+  # Enable documentation analysis
+  markdownlint:
+    enabled: true
+    exclude_paths:
+      - 'providers/**'
+      - 'configs/**'
+  
+  # Enable JSON analysis for configuration templates
+  jsonlint:
+    enabled: true
+    exclude_paths:
+      - 'docs/**'
+      - '.agent/**'
+      - 'providers/**'
+
+exclude_paths:
+  # Exclude generated or third-party files
+  - '.git/**'
+  - 'tmp/**'
+  - 'logs/**'
+  
+# File extensions to analyze
+file_extensions:
+  - '.sh'
+  - '.md'
+  - '.json'
+  - '.txt'
+  - '.yml'
+  - '.yaml'
+
+# Quality settings
+coverage:
+  # Disable coverage for shell scripts (not applicable)
+  enabled: false
+
+# Custom patterns for shell scripts
+patterns:
+  - pattern_id: 'shell_security'
+    category: 'Security'
+    level: 'Error'
+    languages:
+      - 'Shell'
+    
+  - pattern_id: 'documentation_quality'
+    category: 'Documentation'
+    level: 'Warning'
+    languages:
+      - 'Markdown'
