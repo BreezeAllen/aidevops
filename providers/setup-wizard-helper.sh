@@ -25,6 +25,10 @@ RED='\033[0;31m'
 PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
+# Error message constants
+readonly HELP_MESSAGE_SUFFIX="Show this help message"
+readonly USAGE_PREFIX="Usage:"
+
 # String literal constants
 readonly PROMPT_CHOICE_1_4="Enter your choice (1-4): "
 
@@ -122,10 +126,10 @@ ask_setup_needs() {
     
     # Budget assessment
     print_question "What's your monthly budget for DevOps services?"
-    printf "1. Minimal (\$0-50/month)\n"
-    printf "2. Small (\$50-200/month)\n"
-    printf "3. Medium (\$200-500/month)\n"
-    printf "4. Large (\$500+/month)\n"
+    printf '1. Minimal (%s0-50/month)\n' '$'
+    printf '2. Small (%s50-200/month)\n' '$'
+    printf '3. Medium (%s200-500/month)\n' '$'
+    printf '4. Large (%s500+/month)\n' '$'
     
     read -r -p "$PROMPT_CHOICE_1_4" budget
     save_response "budget" "$budget"
@@ -176,12 +180,12 @@ analyze_and_recommend() {
     print_info "🏗️ HOSTING & INFRASTRUCTURE:"
     case "$budget" in
         "1")
-            printf "  ✅ Hostinger - Budget-friendly shared hosting (\$3-12/month)\n"
-            printf "  ✅ Hetzner Cloud - Excellent value VPS (\$3-20/month)\n"
+            printf '  ✅ Hostinger - Budget-friendly shared hosting (%s3-12/month)\n' '$'
+            printf '  ✅ Hetzner Cloud - Excellent value VPS (%s3-20/month)\n' '$'
             ;;
         "2"|"3")
-            printf "  ✅ Hetzner Cloud - Excellent value VPS (\$3-50/month)\n"
-            printf "  ✅ Closte - Competitive VPS pricing (\$5-30/month)\n"
+            printf '  ✅ Hetzner Cloud - Excellent value VPS (%s3-50/month)\n' '$'
+            printf '  ✅ Closte - Competitive VPS pricing (%s5-30/month)\n' '$'
             echo "  ✅ Coolify - Self-hosted deployment platform (free + server costs)"
             ;;
         "4")

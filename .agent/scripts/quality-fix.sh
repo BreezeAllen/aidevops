@@ -141,7 +141,7 @@ fix_positional_parameters() {
                 }' "$file" > "$temp_file"
                 
                 # Replace direct positional parameter usage in case statements
-                sed -i 's/\$1/\$command/g; s/\$2/\$account_name/g; s/\$3/\$target/g; s/\$4/\$options/g' "$temp_file"
+                sed -i 's/\$1/$command/g; s/\$2/$account_name/g; s/\$3/$target/g; s/\$4/$options/g' "$temp_file"
                 
                 if ! diff -q "$file" "$temp_file" > /dev/null; then
                     mv "$temp_file" "$file"

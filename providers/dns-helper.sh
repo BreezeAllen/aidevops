@@ -10,6 +10,9 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Common constants
+readonly AUTH_BEARER_PREFIX="Authorization: Bearer"
+
 print_info() {
     local msg="$1"
     echo -e "${BLUE}[INFO]${NC} $msg"
@@ -190,14 +193,14 @@ cloudflare_dns() {
         "list")
             print_info "Listing DNS records for $domain..."
             curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records" \
-                -H "Authorization: Bearer $api_token" \
+                -H "$AUTH_BEARER_PREFIX $api_token" \
                 -H "Content-Type: application/json" | \
                 jq -r '.result[] | "\(.name) \(.type) \(.content) (TTL: \(.ttl))"'
             ;;
         "add")
             print_info "Adding DNS record: $record_name.$domain $record_type $record_value"
             curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records" \
-                -H "Authorization: Bearer $api_token" \
+                -H "$AUTH_BEARER_PREFIX $api_token" \
                 -H "Content-Type: application/json" \
                 --data "{\"type\":\"$record_type\",\"name\":\"$record_name\",\"content\":\"$record_value\",\"ttl\":300}"
             ;;
@@ -205,11 +208,11 @@ cloudflare_dns() {
             print_info "Deleting DNS record: $record_name.$domain"
             # First get record ID
             local record_id=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records?name=$record_name.$domain" \
-                -H "Authorization: Bearer $api_token" | jq -r '.result[0].id')
+                -H "$AUTH_BEARER_PREFIX $api_token" | jq -r '.result[0].id')
             
             if [[ "$record_id" != "null" ]]; then
                 curl -s -X DELETE "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$record_id" \
-                    -H "Authorization: Bearer $api_token"
+                    -H "$AUTH_BEARER_PREFIX $api_token"
                 print_success "Record deleted"
             else
                 print_error "Record not found"
@@ -348,7 +351,7 @@ case "$command" in
         echo "  $0 delete cloudflare personal example.com www"
         ;;
     *)
-        print_error "Unknown command: $command"
+        print_error "$ERROR_UNKNOWN_COMMAND $command"
         print_info "Use '$0 help' for usage information"
         exit 1
         ;;

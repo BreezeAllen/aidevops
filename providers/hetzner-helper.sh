@@ -15,6 +15,9 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Common constants
+readonly AUTH_BEARER_PREFIX="Authorization: Bearer"
+
 print_info() {
     local msg="$1"
     echo -e "${BLUE}[INFO]${NC} $msg"
@@ -73,7 +76,7 @@ list_servers() {
         print_info "Project: $project ($description)"
         print_info "Account: $account"
         
-        servers=$(curl -s -H "Authorization: Bearer $api_token" \
+        servers=$(curl -s -H "$AUTH_BEARER_PREFIX $api_token" \
                       "https://api.hetzner.cloud/v1/servers" | \
                   jq -r '.servers[]? | "  - \(.name) (\(.public_net.ipv4.ip)) - \(.server_type.name) - \(.status)"')
         
@@ -146,7 +149,7 @@ get_server_details() {
     for project in $projects; do
         api_token=$(jq -r ".projects.$project.api_token" "$CONFIG_FILE")
         
-        server_info=$(curl -s -H "Authorization: Bearer $api_token" \
+        server_info=$(curl -s -H "$AUTH_BEARER_PREFIX $api_token" \
                           "https://api.hetzner.cloud/v1/servers" | \
                       jq -r ".servers[]? | select(.name == \"$server_name\") | \"\(.public_net.ipv4.ip) \(.name) $project\"")
         
@@ -175,7 +178,7 @@ generate_ssh_configs() {
         
         print_info "Processing project: $project ($description)"
         
-        servers=$(curl -s -H "Authorization: Bearer $api_token" \
+        servers=$(curl -s -H "$AUTH_BEARER_PREFIX $api_token" \
                       "https://api.hetzner.cloud/v1/servers" | \
                   jq -r '.servers[]? | "\(.name) \(.public_net.ipv4.ip)"')
         
@@ -236,7 +239,7 @@ case "$command" in
         echo "  $0 generate-ssh-configs"
         ;;
     *)
-        print_error "Unknown command: $command"
+        print_error "$ERROR_UNKNOWN_COMMAND $command"
         print_info "Use '$0 help' for usage information"
         exit 1
         ;;

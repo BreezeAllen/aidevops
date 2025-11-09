@@ -11,6 +11,10 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Error message constants
+readonly USAGE_PREFIX="Usage:"
+readonly ERROR_UNKNOWN_COMMAND="Unknown command:"
+
 # Configuration file
 CONFIG_FILE="../configs/coolify-config.json"
 
@@ -340,7 +344,7 @@ case "$command" in
         echo "  - Coolify installed and running on target servers"
         ;;
     *)
-        print_error "Unknown command: $command"
+        print_error "$ERROR_UNKNOWN_COMMAND $command"
         print_info "Use '$0 help' for usage information"
         exit 1
         ;;

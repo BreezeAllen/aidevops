@@ -152,13 +152,13 @@ fix_common_strings_in_file() {
 
         # Usage message
         local usage_count
-        usage_count=$(grep -c "Usage: \$0" "$file" 2>/dev/null || echo "0")
+        usage_count=$(grep -c "Usage: \\$0" "$file" 2>/dev/null || echo "0")
         if [[ "$usage_count" -ge 3 ]]; then
             if ! grep -q "readonly.*USAGE_PREFIX" "$file"; then
                 sed -i '/# Common constants/a readonly USAGE_PREFIX="Usage:"' "$file"
                 changes_made=1
             fi
-            sed -i 's|"Usage: \$0"|"$USAGE_PREFIX $0"|g' "$file"
+            sed -i 's|"Usage: \\$0"|"$USAGE_PREFIX $0"|g' "$file"
             print_success "Replaced $usage_count occurrences of usage message"
         fi
     fi
@@ -209,7 +209,7 @@ show_help() {
     echo "  • \"Content-Type: application/json\" → \$CONTENT_TYPE_JSON"
     echo "  • \"Authorization: Bearer\" → \$AUTH_BEARER_PREFIX"
     echo "  • \"Unknown command:\" → \$ERROR_UNKNOWN_COMMAND"
-    echo "  • \"Usage: \$0\" → \$USAGE_PREFIX"
+    echo "  • \"Usage: \\$0\" → \\$USAGE_PREFIX"
     echo "  • Help messages → \$HELP_MESSAGE_SUFFIX"
     echo ""
     echo "Requirements:"

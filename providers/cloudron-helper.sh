@@ -15,6 +15,10 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Error message constants
+readonly USAGE_PREFIX="Usage:"
+readonly ERROR_UNKNOWN_COMMAND="Unknown command:"
+
 print_info() {
     local message="$1"
     echo -e "${BLUE}[INFO]${NC} $message"
@@ -294,7 +298,7 @@ case "$command" in
         echo "Install Cloudron CLI: npm install -g cloudron"
         ;;
     *)
-        print_error "Unknown command: $command"
+        print_error "$ERROR_UNKNOWN_COMMAND $command"
         print_info "Use '$0 help' for usage information"
         exit 1
         ;;
