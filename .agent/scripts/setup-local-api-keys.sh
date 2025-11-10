@@ -110,7 +110,9 @@ load_api_keys() {
     
     while IFS='=' read -r service key; do
         if [[ -n "$service" && -n "$key" ]]; then
-            export "${service^^}_API_TOKEN=$key"
+            local service_upper
+            service_upper=$(echo "$service" | tr '[:lower:]' '[:upper:]')
+            export "${service_upper}_API_TOKEN=$key"
             print_success "Loaded $service API key"
         fi
     done < "$API_KEY_FILE"
