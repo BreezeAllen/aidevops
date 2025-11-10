@@ -67,7 +67,7 @@ add_returns_to_file() {
                 # Add return if missing
                 if [[ $function_has_return -eq 0 ]]; then
                     # Check if line is just closing brace
-                    if [[ "$line" =~ ^[[:space:]]*\}[[:space:]]*$ ]]; then
+                    if [[ "$line" == *"}"* ]] && [[ "$line" != *[a-zA-Z0-9]* ]]; then
                         echo "    return 0" >> "$temp_file"
                         echo "$line" >> "$temp_file"
                     else
