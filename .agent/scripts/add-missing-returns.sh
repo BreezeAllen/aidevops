@@ -67,14 +67,12 @@ add_returns_to_file() {
                 # Add return if missing
                 if [[ $function_has_return -eq 0 ]]; then
                     # Check if line is just closing brace
-                    if [[ $line =~ ^[[:space:]]*\}[[:space:]]*$ ]]; then
+                    if [[ "$line" =~ ^[[:space:]]*\}[[:space:]]*$ ]]; then
                         echo "    return 0" >> "$temp_file"
                         echo "$line" >> "$temp_file"
                     else
                         # Line has content before brace
                         echo "${line%\}}" >> "$temp_file"
-    return 0
-}
                         echo "    return 0" >> "$temp_file"
                         echo "}" >> "$temp_file"
                     fi
