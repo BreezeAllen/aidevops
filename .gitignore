@@ -47,6 +47,21 @@ authorized_keys
 *token*
 *secret*
 *credential*
+*api_key*
+*apikey*
+
+# Environment files
+.env*
+*.env
+env.local
+env.production
+env.development
+
+# Common secret file patterns
+secrets/
+.secrets/
+credentials/
+.credentials/
 
 # Backup files
 *.backup
