@@ -1,0 +1,7 @@
+organization=marcusquinn
+projectKey=marcusquinn_ai-assisted-dev-ops
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.76401
+dashboardUrl=https://sonarcloud.io/dashboard?id=marcusquinn_ai-assisted-dev-ops
+ceTaskId=AZprgG8CEvCTUihWMli2
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZprgG8CEvCTUihWMli2

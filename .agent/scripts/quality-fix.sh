@@ -77,11 +77,19 @@ fix_return_statements() {
                 elif [[ $in_function == true ]]; then
                     # Count braces to track function scope
                     local open_braces
-                    open_braces=$(echo "$line" | grep -o '{' | wc -l || echo "0")
+                    open_braces=$(echo "$line" | grep -o '{' | wc -l 2>/dev/null || echo "0")
                     local close_braces
-                    close_braces=$(echo "$line" | grep -o '}' | wc -l || echo "0")
-                    
-                    ((brace_count += open_braces - close_braces))
+                    close_braces=$(echo "$line" | grep -o '}' | wc -l 2>/dev/null || echo "0")
+
+                    # Ensure variables are numeric
+                    open_braces=${open_braces//[^0-9]/}
+                    close_braces=${close_braces//[^0-9]/}
+                    open_braces=${open_braces:-0}
+                    close_braces=${close_braces:-0}
+
+                    # Fix arithmetic expansion
+                    local diff=$((open_braces - close_braces))
+                    brace_count=$((brace_count + diff))
                     
                     # Check if function is ending
                     if [[ $brace_count -eq 0 && $line == "}" ]]; then

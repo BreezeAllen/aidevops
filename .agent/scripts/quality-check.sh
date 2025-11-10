@@ -89,10 +89,16 @@ check_return_statements() {
             
             # Check if file has functions without return statements
             local functions_without_return
-            functions_without_return=$(grep -n "^[a-zA-Z_][a-zA-Z0-9_]*() {" "$file" | wc -l)
+            functions_without_return=$(grep -c "^[a-zA-Z_][a-zA-Z0-9_]*() {" "$file" 2>/dev/null || echo "0")
             local return_statements
-            return_statements=$(grep -c "return [01]" "$file" || echo "0")
-            
+            return_statements=$(grep -c "return [01]" "$file" 2>/dev/null || echo "0")
+
+            # Ensure variables are numeric
+            functions_without_return=${functions_without_return//[^0-9]/}
+            return_statements=${return_statements//[^0-9]/}
+            functions_without_return=${functions_without_return:-0}
+            return_statements=${return_statements:-0}
+
             if [[ $return_statements -lt $functions_without_return ]]; then
                 ((violations++))
                 print_warning "Missing return statements in $file"
