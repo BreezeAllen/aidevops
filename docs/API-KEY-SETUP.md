@@ -57,9 +57,9 @@ bash .agent/scripts/setup-local-api-keys.sh load
 ## 🔍 **STORAGE LOCATIONS**
 
 ### **✅ SECURE (USER-PRIVATE ONLY):**
-- **API Keys**: `~/.config/ai-assisted-devops/api-keys` (permissions: 600)
-- **CodeRabbit**: `~/.config/coderabbit/api_key` (permissions: 600)
+- **Unified Storage**: `~/.config/ai-assisted-devops/api-keys` (permissions: 600)
 - **Directory**: `~/.config/ai-assisted-devops/` (permissions: 700)
+- **Legacy CodeRabbit**: `~/.config/coderabbit/api_key` (fallback support)
 
 ### **❌ NEVER STORE IN:**
 - Repository files (any `.json`, `.sh`, `.md` files in the repo)
@@ -70,9 +70,10 @@ bash .agent/scripts/setup-local-api-keys.sh load
 ## 🚀 **CLI INTEGRATION**
 
 ### **Automatic Loading:**
-All CLI scripts automatically load API keys from secure storage:
-- **Codacy CLI**: Loads from secure storage automatically
-- **CodeRabbit CLI**: Uses `~/.config/coderabbit/api_key`
+All CLI scripts automatically load API keys from unified secure storage:
+- **Codacy CLI**: Loads from unified storage automatically
+- **CodeRabbit CLI**: Loads from unified storage (with legacy fallback)
+- **SonarScanner CLI**: Loads from unified storage automatically
 - **Git Platform helpers**: Load tokens as needed
 
 ### **Manual Loading:**

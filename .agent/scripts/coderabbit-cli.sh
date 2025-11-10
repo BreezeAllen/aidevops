@@ -134,11 +134,27 @@ setup_api_key() {
 
 # Load API key from configuration
 load_api_key() {
+    # Try to load API key from unified secure storage first
+    local api_key_script="$(dirname "$0")/setup-local-api-keys.sh"
+    if [[ -f "$api_key_script" ]]; then
+        local stored_key
+        stored_key=$("$api_key_script" get coderabbit 2>/dev/null)
+        if [[ -n "$stored_key" ]]; then
+            export CODERABBIT_API_KEY="$stored_key"
+            print_info "Loaded CodeRabbit API key from secure local storage"
+            return 0
+        fi
+    fi
+
+    # Fallback to legacy storage location
     if [[ -f "$API_KEY_FILE" ]]; then
         export CODERABBIT_API_KEY=$(cat "$API_KEY_FILE")
+        print_info "Loaded CodeRabbit API key from legacy storage"
         return 0
     else
-        print_error "API key not configured. Run: $0 setup"
+        print_error "API key not configured"
+        print_info "Set up with: bash .agent/scripts/setup-local-api-keys.sh set coderabbit YOUR_API_KEY"
+        print_info "Or run: $0 setup"
         return 1
     fi
 }
