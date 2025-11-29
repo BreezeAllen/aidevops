@@ -19,9 +19,9 @@ set -euo pipefail
 
 # Configuration
 # shellcheck disable=SC2155
-readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" || exit
 # shellcheck disable=SC2155
-readonly FRAMEWORK_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+readonly FRAMEWORK_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)" || exit
 readonly OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
 readonly OPENCODE_AGENT_DIR="$OPENCODE_CONFIG_DIR/agent"
 readonly OPENCODE_JSON="$OPENCODE_CONFIG_DIR/opencode.json"
@@ -429,7 +429,7 @@ Quality Issue → Fix Applied → Pattern Identified → Framework Updated → I
 ### Create PR for Improvements
 
 ```bash
-cd ~/git/aidevops
+cd ~/git/aidevops || exit
 git checkout -b improve/quality-[rule]-[date]
 # Apply changes
 git commit -m "improve(quality): prevent [rule] violations"
@@ -734,7 +734,7 @@ If the user wants to contribute improvements:
 
 1. **Create branch**:
    ```bash
-   cd ~/git/aidevops
+   cd ~/git/aidevops || exit
    git checkout -b improve/agent-[name]-[date]
    ```
 
