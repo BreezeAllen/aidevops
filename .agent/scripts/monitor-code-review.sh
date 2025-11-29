@@ -165,7 +165,12 @@ apply_automatic_fixes() {
                 # Apply common fixes
                 if grep -q "cd " "$file" && ! grep -q "cd .*||" "$file"; then
                     print_info "Fixing cd commands in $file"
-                    sed -i '' 's/cd \([^|]*\)$/cd \1 || exit/g' "$file"
+                    # Use portable sed syntax (GNU vs BSD)
+                    if sed --version 2>/dev/null | grep -q GNU; then
+                        sed -i 's/cd \([^|]*\)$/cd \1 || exit/g' "$file"
+                    else
+                        sed -i '' 's/cd \([^|]*\)$/cd \1 || exit/g' "$file"
+                    fi
                     ((fixes_applied++))
                 fi
             fi
@@ -250,4 +255,3 @@ main() {
 }
 
 main "$@"
-    return 0

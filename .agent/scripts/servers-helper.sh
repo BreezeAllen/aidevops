@@ -239,4 +239,3 @@ case "$server" in
         esac
         ;;
 esac
-    return 0

@@ -154,4 +154,3 @@ if [[ $# -eq 0 && ! -d .git ]]; then
 fi
 
 main "$@"
-    return 0
