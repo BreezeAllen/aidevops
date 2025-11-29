@@ -144,6 +144,76 @@ Detailed instructions for the agent...
 - **Tab**: Cycle through primary agents
 - **@agent-name**: Invoke a subagent
 
+### Agent Invocation Order
+
+OpenCode doesn't have built-in workflow orchestration, but agents should be invoked in logical order based on dependencies:
+
+#### Recommended Workflow Order
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    DEVELOPMENT WORKFLOW                         │
+├─────────────────────────────────────────────────────────────────┤
+│  1. PLAN/RESEARCH (parallel)                                    │
+│     @context7-mcp-setup  - Get documentation                    │
+│     @seo                 - Research keywords/competitors        │
+│     @browser-automation  - Scrape/test existing sites           │
+│                                                                 │
+│  2. INFRASTRUCTURE (sequential)                                 │
+│     @dns-providers       - Configure DNS first                  │
+│     @hetzner             - Provision servers                    │
+│     @hostinger           - Setup hosting/WordPress              │
+│                                                                 │
+│  3. DEVELOPMENT (parallel)                                      │
+│     @wordpress           - Local development                    │
+│     @git-platforms       - Repository management                │
+│     @crawl4ai-usage      - Data extraction                      │
+│                                                                 │
+│  4. QUALITY (sequential)                                        │
+│     @code-quality        - Run checks, apply fixes              │
+│     @agent-review        - Session analysis + PR                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### Parallel vs Sequential
+
+| Type | Agents | When to Use |
+|------|--------|-------------|
+| **Parallel** | Research agents (seo, context7, browser) | No dependencies between tasks |
+| **Sequential** | Infrastructure (dns → server → hosting) | Output of one is input to next |
+| **Always Last** | code-quality, agent-review | Requires completed work to review |
+
+#### Invoking Multiple Agents
+
+OpenCode processes one `@mention` per message. For parallel work, send separate messages:
+
+```bash
+# Parallel research (send in quick succession)
+> @seo analyze competitors for example.com
+> @context7-mcp-setup get Next.js caching docs
+> @browser-automation screenshot example.com homepage
+
+# Sequential infrastructure (wait for each to complete)
+> @dns-providers create A record for app.example.com → 1.2.3.4
+# Wait for DNS propagation...
+> @hetzner create server app-server in brandlight
+# Wait for server...
+> @hostinger deploy WordPress to app.example.com
+```
+
+#### End-of-Session Pattern (MANDATORY)
+
+**Always end sessions with these agents in order:**
+
+1. **@code-quality** - Fix any quality issues introduced
+2. **@agent-review** - Analyze session, suggest improvements, optionally create PR
+
+```bash
+> @code-quality check and fix any issues in today's changes
+# Wait for fixes...
+> @agent-review analyze this session
+```
+
 ### Example Workflows
 
 ```bash

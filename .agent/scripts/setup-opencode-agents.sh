@@ -113,7 +113,7 @@ generate_agent_files() {
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/aidevops.md" << 'AGENT_EOF'
 ---
-description: AI DevOps Framework - comprehensive infrastructure automation across 29+ services including Hostinger, Hetzner, Cloudflare, GitHub/GitLab/Gitea, MainWP, code quality tools, and more
+description: AI DevOps Framework - comprehensive infrastructure automation across 29+ services. Primary agent - use Tab to switch. Orchestrates subagents in order: research → infrastructure → development → quality
 mode: primary
 temperature: 0.2
 tools:
@@ -183,7 +183,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/hostinger.md" << 'AGENT_EOF'
 ---
-description: Hostinger hosting operations - website management, WordPress deployment, DNS configuration, domain management, and billing
+description: "[INFRA-3] Hostinger hosting - websites, WordPress, DNS. Run AFTER dns-providers, hetzner. Sequential with infrastructure agents"
 mode: subagent
 temperature: 0.1
 tools:
@@ -228,7 +228,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/hetzner.md" << 'AGENT_EOF'
 ---
-description: Hetzner Cloud infrastructure - server management, firewalls, volumes, SSH keys, and Docker Compose deployments across multiple accounts
+description: "[INFRA-2] Hetzner Cloud - servers, firewalls, volumes, Docker. Run AFTER dns-providers. Sequential with infrastructure agents"
 mode: subagent
 temperature: 0.1
 tools:
@@ -276,7 +276,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/wordpress.md" << 'AGENT_EOF'
 ---
-description: WordPress and MainWP operations - local development with LocalWP, multi-site management via MainWP, theme/plugin deployment
+description: "[DEV-1] WordPress/MainWP - local dev, multi-site management. Parallel with git-platforms, crawl4ai. Run AFTER infrastructure"
 mode: subagent
 temperature: 0.2
 tools:
@@ -315,7 +315,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/seo.md" << 'AGENT_EOF'
 ---
-description: SEO analysis and research - Google Search Console data, Ahrefs backlink/keyword analysis, PageSpeed insights, and content optimization
+description: "[RESEARCH-1] SEO analysis - GSC, Ahrefs, PageSpeed. Parallel with context7, browser-automation. Run FIRST in workflow"
 mode: subagent
 temperature: 0.2
 tools:
@@ -357,7 +357,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/code-quality.md" << 'AGENT_EOF'
 ---
-description: Code quality and security scanning - SonarCloud, Codacy, CodeRabbit, Qlty, Snyk, ShellCheck for comprehensive code analysis, automated fixes, and framework improvement
+description: "[QUALITY-1] Code quality - SonarCloud, Codacy, ShellCheck, Snyk. Run BEFORE agent-review. Sequential - always near END of session"
 mode: subagent
 temperature: 0.1
 tools:
@@ -443,7 +443,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/browser-automation.md" << 'AGENT_EOF'
 ---
-description: Browser automation and testing - Chrome DevTools for debugging and performance, Playwright for cross-browser testing, web scraping with Crawl4AI
+description: "[RESEARCH-2] Browser automation - Chrome DevTools, Playwright, scraping. Parallel with seo, context7. Run FIRST in workflow"
 mode: subagent
 temperature: 0.2
 tools:
@@ -480,7 +480,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/context7-mcp-setup.md" << 'AGENT_EOF'
 ---
-description: Context7 documentation search - real-time access to library documentation for development tasks
+description: "[RESEARCH-3] Context7 docs - library documentation lookup. Parallel with seo, browser-automation. Run FIRST in workflow"
 mode: subagent
 temperature: 0.2
 tools:
@@ -510,7 +510,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/google-search-console-examples.md" << 'AGENT_EOF'
 ---
-description: Google Search Console queries and examples - search performance analysis, indexing status, sitemap management
+description: "[RESEARCH-1b] Google Search Console - performance, indexing, sitemaps. Use with @seo agent. Run FIRST in workflow"
 mode: subagent
 temperature: 0.1
 tools:
@@ -540,7 +540,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/git-platforms.md" << 'AGENT_EOF'
 ---
-description: Git platform operations - GitHub, GitLab, Gitea repository management, issues, PRs/MRs, branches, and CI/CD workflows
+description: "[DEV-2] Git platforms - GitHub/GitLab/Gitea repos, issues, PRs. Parallel with wordpress, crawl4ai. Run AFTER infrastructure"
 mode: subagent
 temperature: 0.1
 tools:
@@ -582,7 +582,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/crawl4ai-usage.md" << 'AGENT_EOF'
 ---
-description: Web crawling and data extraction - Crawl4AI for LLM-friendly content scraping, structured data extraction, and RAG pipelines
+description: "[DEV-3] Web crawling - Crawl4AI scraping, data extraction, RAG. Parallel with wordpress, git-platforms. Run AFTER infrastructure"
 mode: subagent
 temperature: 0.2
 tools:
@@ -616,7 +616,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/dns-providers.md" << 'AGENT_EOF'
 ---
-description: DNS management - Cloudflare, Namecheap, Route 53, and domain registrar operations for DNS records, zones, and domain configuration
+description: "[INFRA-1] DNS management - Cloudflare, Namecheap, Route 53. Run FIRST in infrastructure sequence, BEFORE hetzner/hostinger"
 mode: subagent
 temperature: 0.1
 tools:
@@ -650,7 +650,7 @@ AGENT_EOF
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/agent-review.md" << 'AGENT_EOF'
 ---
-description: Session review agent - analyzes conversation to identify missing, incorrect, or excessive information in aidevops agents, suggests improvements, and composes PRs for the aidevops repo
+description: "[QUALITY-2] Session review - analyzes session, improves agents, composes PRs. Run LAST in every session, AFTER code-quality"
 mode: subagent
 temperature: 0.3
 tools:
