@@ -41,6 +41,7 @@ get_repo() {
         }
     fi
     echo "$repo"
+    return 0
 }
 
 # Get commit SHA (from PR or current HEAD)
@@ -51,6 +52,7 @@ get_sha() {
     else
         git rev-parse HEAD
     fi
+    return 0
 }
 
 # Show status of all checks
@@ -89,6 +91,7 @@ cmd_status() {
                 ;;
         esac
     done | sort
+    return 0
 }
 
 # Show only failed checks with details
@@ -120,6 +123,7 @@ cmd_failed() {
     else
         echo -e "${RED}Total failed: ${failed_count}${NC}"
     fi
+    return 0
 }
 
 # Get line-level annotations from all check runs
@@ -164,6 +168,7 @@ cmd_annotations() {
     else
         echo -e "${YELLOW}Total annotations: ${total_annotations}${NC}"
     fi
+    return 0
 }
 
 # Get Codacy-specific feedback
@@ -211,6 +216,7 @@ cmd_codacy() {
         echo -e "${YELLOW}Issues found:${NC}"
         echo "$annotations" | jq -r '.[] | "  \(.path):\(.start_line) [\(.annotation_level)] \(.message)"'
     fi
+    return 0
 }
 
 # Get CodeRabbit review comments
@@ -259,6 +265,7 @@ cmd_coderabbit() {
         echo -e "${YELLOW}Inline Comments (${count}):${NC}"
         echo "$comments" | jq -r '.[] | "\(.path):\(.line // .original_line)\n  \(.body)\n"'
     fi
+    return 0
 }
 
 # Get SonarCloud feedback
@@ -292,6 +299,7 @@ cmd_sonar() {
     echo "Status: ${conclusion}"
     echo "Summary: ${summary}"
     echo "Dashboard: ${details_url}"
+    return 0
 }
 
 # Watch for check completion
@@ -339,6 +347,7 @@ cmd_watch() {
         
         sleep "$interval"
     done
+    return 0
 }
 
 # Show help
@@ -374,10 +383,13 @@ Requirements:
   - jq for JSON parsing
   - Inside a Git repository linked to GitHub
 EOF
+    return 0
 }
 
 # Parse arguments
 main() {
+    local _arg1="$1"
+    local _arg2="$2"
     local command="${1:-status}"
     shift || true
     
@@ -385,13 +397,13 @@ main() {
     local commit_sha=""
     
     while [[ $# -gt 0 ]]; do
-        case "$1" in
+        case "$_arg1" in
             --pr)
-                pr_number="$2"
+                pr_number="$_arg2"
                 shift 2
                 ;;
             --commit)
-                commit_sha="$2"
+                commit_sha="$_arg2"
                 shift 2
                 ;;
             --help|-h)
@@ -399,7 +411,7 @@ main() {
                 exit 0
                 ;;
             *)
-                echo "Unknown option: $1" >&2
+                echo "Unknown option: $_arg1" >&2
                 show_help
                 exit 1
                 ;;

@@ -13,12 +13,14 @@ readonly RED='\033[0;31m'
 readonly NC='\033[0m'
 
 print_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${BLUE}ℹ️  $_arg1${NC}"
     return 0
 }
 
 print_error() {
-    echo -e "${RED}❌ $1${NC}"
+    local _arg1="$1"
+    echo -e "${RED}❌ $_arg1${NC}"
     return 0
 }
 
@@ -86,6 +88,7 @@ find_missing_returns_in_file() {
         }
     }
     ' "$file"
+    return 0
 }
 
 # Main execution

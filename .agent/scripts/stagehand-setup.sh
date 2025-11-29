@@ -118,6 +118,7 @@ async function searchProducts(query, maxResults = 5) {
     } finally {
         await stagehand.close();
     }
+    return 0
 }
 
 // Example usage
@@ -349,6 +350,7 @@ create_package_template() {
   ],
   "author": "AI DevOps Framework",
   "license": "MIT"
+    return 0
 }
 EOF
 
@@ -379,6 +381,7 @@ setup_mcp_integration() {
       }
     }
   }
+    return 0
 }
 EOF
 

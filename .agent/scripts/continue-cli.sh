@@ -141,6 +141,7 @@ setup_continue_config() {
       "prompt": "Identify and explain any bugs in the selected code, then suggest fixes."
     }
   ]
+    return 0
 }
 EOF
 
@@ -411,6 +412,7 @@ test_assert_equals() {
         echo "   Actual: \$actual"
         return 1
     fi
+    return 0
 }
 
 test_assert_file_exists() {
@@ -425,6 +427,7 @@ test_assert_file_exists() {
         echo "   File not found: \$file"
         return 1
     fi
+    return 0
 }
 
 # Test Cases
@@ -441,6 +444,7 @@ run_tests() {
     
     echo ""
     echo "✅ Test run completed"
+    return 0
 }
 
 # Execute tests
@@ -609,6 +613,8 @@ show_help() {
 
 # Main function
 main() {
+    local _arg2="$2"
+    local _arg3="$3"
     local command="${1:-help}"
 
     # Ensure temp directory exists
@@ -619,19 +625,19 @@ main() {
             setup_continue_config
             ;;
         "chat")
-            start_pair_programming "$2"
+            start_pair_programming "$_arg2"
             ;;
         "explain")
-            get_code_explanation "$2" "$3"
+            get_code_explanation "$_arg2" "$_arg3"
             ;;
         "refactor")
-            get_refactoring_suggestions "$2" "$3"
+            get_refactoring_suggestions "$_arg2" "$_arg3"
             ;;
         "test")
-            generate_unit_tests "$2" "$3"
+            generate_unit_tests "$_arg2" "$_arg3"
             ;;
         "review")
-            perform_code_review "$2"
+            perform_code_review "$_arg2"
             ;;
         "status")
             show_status
@@ -645,6 +651,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

@@ -14,17 +14,20 @@ readonly YELLOW='\033[1;33m'
 readonly NC='\033[0m'
 
 print_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    local _arg1="$1"
+    echo -e "${GREEN}✅ $_arg1${NC}"
     return 0
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${BLUE}ℹ️  $_arg1${NC}"
     return 0
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${YELLOW}⚠️  $_arg1${NC}"
     return 0
 }
 
@@ -162,6 +165,7 @@ fix_critical_shellcheck_in_file() {
         print_info "No critical ShellCheck issues fixed in: $file"
         return 1
     fi
+    return 0
 }
 
 # Main execution

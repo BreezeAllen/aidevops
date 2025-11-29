@@ -65,6 +65,7 @@ test_javascript_integration() {
         echo "FAIL: JavaScript integration" >> "$TEST_LOG"
         return 1
     fi
+    return 0
 }
 
 # Test Python integration
@@ -80,6 +81,7 @@ test_python_integration() {
         echo "FAIL: Python integration" >> "$TEST_LOG"
         return 1
     fi
+    return 0
 }
 
 # Test MCP integration for both
@@ -114,6 +116,7 @@ test_both_mcp_integration() {
         echo "FAIL: MCP script missing" >> "$TEST_LOG"
         return 1
     fi
+    return 0
 }
 
 # Test documentation completeness
@@ -151,10 +154,12 @@ test_documentation_completeness() {
     else
         return 1
     fi
+    return 0
 }
 
 # Test helper script consistency
 test_helper_consistency() {
+    local _arg1="$1"
     print_info "Testing helper script consistency..."
     
     local js_helper="${SCRIPT_DIR}/../../.agent/scripts/stagehand-helper.sh"
@@ -163,8 +168,8 @@ test_helper_consistency() {
     if [[ -f "$js_helper" ]] && [[ -f "$python_helper" ]]; then
         # Check if both have similar command structure
         local js_commands python_commands
-        js_commands=$(bash "$js_helper" help 2>/dev/null | grep -E "^\s+[a-z-]+\s+" | awk '{print $1}' | sort)
-        python_commands=$(bash "$python_helper" help 2>/dev/null | grep -E "^\s+[a-z-]+\s+" | awk '{print $1}' | sort)
+        js_commands=$(bash "$js_helper" help 2>/dev/null | grep -E "^\s+[a-z-]+\s+" | awk '{print $_arg1}' | sort)
+        python_commands=$(bash "$python_helper" help 2>/dev/null | grep -E "^\s+[a-z-]+\s+" | awk '{print $_arg1}' | sort)
         
         # Check for common commands
         local common_commands=("help" "install" "setup" "status" "clean")
@@ -191,6 +196,7 @@ test_helper_consistency() {
         echo "FAIL: Helper scripts missing" >> "$TEST_LOG"
         return 1
     fi
+    return 0
 }
 
 # Generate comprehensive test report

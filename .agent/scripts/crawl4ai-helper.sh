@@ -293,6 +293,7 @@ mcp_setup() {
     "pdf_generation",
     "javascript_execution"
   ]
+    return 0
 }
 EOF
 
@@ -308,6 +309,8 @@ EOF
 
 # Setup CapSolver integration for CAPTCHA solving
 capsolver_setup() {
+    local _arg1="$1"
+    local _arg3="$3"
     print_header "Setting up CapSolver Integration for CAPTCHA Solving"
 
     local capsolver_config="$CONFIG_DIR/capsolver-config.json"
@@ -352,14 +355,14 @@ capsolver_setup() {
       "type": "ReCaptchaV2EnterpriseTaskProxyLess",
       "description": "reCAPTCHA v2 Enterprise solving",
       "response_field": "gRecaptchaResponse",
-      "pricing": "$1/1000 requests",
+      "pricing": "$_arg1/1000 requests",
       "avg_solve_time": "< 9 seconds"
     },
     "recaptcha_v3_enterprise": {
       "type": "ReCaptchaV3EnterpriseTaskProxyLess",
       "description": "reCAPTCHA v3 Enterprise solving with score ≥0.9",
       "response_field": "gRecaptchaResponse",
-      "pricing": "$3/1000 requests",
+      "pricing": "$_arg3/1000 requests",
       "avg_solve_time": "< 3 seconds"
     },
     "cloudflare_turnstile": {
@@ -367,7 +370,7 @@ capsolver_setup() {
       "description": "Cloudflare Turnstile CAPTCHA solving",
       "response_field": "token",
       "injection_target": "cf-turnstile-response",
-      "pricing": "$3/1000 requests",
+      "pricing": "$_arg3/1000 requests",
       "avg_solve_time": "< 3 seconds"
     },
     "cloudflare_challenge": {
@@ -431,6 +434,7 @@ capsolver_setup() {
     "developer_plan": "Contact for better pricing",
     "balance_check": "GET /getBalance endpoint"
   }
+    return 0
 }
 EOF
 
@@ -641,6 +645,7 @@ crawl_url() {
       "cache_mode": "bypass"
     }
   }
+    return 0
 }
 EOF
 )
@@ -709,6 +714,7 @@ extract_structured() {
       "cache_mode": "bypass"
     }
   }
+    return 0
 }
 EOF
 )

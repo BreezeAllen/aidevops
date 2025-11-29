@@ -47,6 +47,7 @@ determine_bump_type() {
     
     # Default to patch for any other changes
     echo "patch"
+    return 0
 }
 
 # Function to check if version should be bumped
@@ -129,6 +130,7 @@ main() {
         print_error "Version manager script not found or not executable"
         exit 1
     fi
+    return 0
 }
 
 # Show usage if no arguments and not in git repo

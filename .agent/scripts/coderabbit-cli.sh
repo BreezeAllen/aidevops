@@ -98,6 +98,7 @@ get_coderabbit_reviews() {
 
 # Apply CodeRabbit auto-fixes
 apply_coderabbit_fixes() {
+    local _arg1="$1"
     print_header "Applying CodeRabbit Auto-Fixes"
 
     local file="${1:-}"
@@ -145,7 +146,7 @@ apply_coderabbit_fixes() {
 
         # Add return statements to functions (basic implementation)
         awk '
-        /^[a-zA-Z_][a-zA-Z0-9_]*\(\)/ { in_function = 1; function_name = $1 }
+        /^[a-zA-Z_][a-zA-Z0-9_]*\(\)/ { in_function = 1; function_name = $_arg1 }
         /^}$/ && in_function {
             print "    return 0"
             print $0
@@ -189,6 +190,7 @@ check_cli_installed() {
     else
         return 1
     fi
+    return 0
 }
 
 # Install CodeRabbit CLI
@@ -209,6 +211,7 @@ install_cli() {
         print_error "Failed to install CodeRabbit CLI"
         return 1
     fi
+    return 0
 }
 
 # Setup API key configuration
@@ -273,6 +276,7 @@ load_api_key() {
         print_info "  export CODERABBIT_API_KEY=\"your-api-key\""
         return 1
     fi
+    return 0
 }
 
 # Review current changes
@@ -296,6 +300,7 @@ review_changes() {
         print_error "Code review failed"
         return 1
     fi
+    return 0
 }
 
 # Analyze specific files or directories
@@ -321,6 +326,7 @@ analyze_code() {
         print_error "Code analysis failed"
         return 1
     fi
+    return 0
 }
 
 # Check CodeRabbit CLI status
@@ -370,6 +376,7 @@ show_help() {
 
 # Main function
 main() {
+    local _arg2="$2"
     local command="${1:-help}"
 
     case "$command" in
@@ -383,7 +390,7 @@ main() {
             review_changes
             ;;
         "analyze")
-            analyze_code "$2"
+            analyze_code "$_arg2"
             ;;
         "status")
             check_status
@@ -392,7 +399,7 @@ main() {
             get_coderabbit_reviews
             ;;
         "fix")
-            apply_coderabbit_fixes "$2"
+            apply_coderabbit_fixes "$_arg2"
             ;;
         "help"|"--help"|"-h")
             show_help
@@ -403,6 +410,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

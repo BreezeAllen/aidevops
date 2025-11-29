@@ -187,6 +187,7 @@ install_clis() {
         print_warning "Some CLI installations failed"
         return 1
     fi
+    return 0
 }
 
 # Initialize CLI configurations
@@ -252,6 +253,7 @@ init_clis() {
         print_warning "Some CLI initializations failed"
         return 1
     fi
+    return 0
 }
 
 # Run analysis with CLIs
@@ -362,6 +364,7 @@ analyze_with_clis() {
         print_warning "Some analyses failed"
         return 1
     fi
+    return 0
 }
 
 # Show CLI status
@@ -513,6 +516,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

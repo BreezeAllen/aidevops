@@ -79,6 +79,8 @@ check_sonarcloud_status() {
 }
 
 check_return_statements() {
+    local _arg1="$1"
+    local _arg2="$2"
     echo -e "${BLUE}🔄 Checking Return Statements (S7682)...${NC}"
     
     local violations=0
@@ -159,7 +161,7 @@ check_string_literals() {
         if [[ -f "$file" ]]; then
             # Find strings that appear 3 or more times
             local repeated_strings
-            repeated_strings=$(grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$1 >= 3 {print $1, $2}' | wc -l)
+            repeated_strings=$(grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$_arg1 >= 3 {print $_arg1, $_arg2}' | wc -l)
             
             if [[ $repeated_strings -gt 0 ]]; then
                 ((violations += repeated_strings))

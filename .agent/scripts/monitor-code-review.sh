@@ -16,10 +16,11 @@ readonly PURPLE='\033[0;35m'
 readonly NC='\033[0m' # No Color
 
 print_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-print_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-print_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
-print_header() { echo -e "${PURPLE}[MONITOR]${NC} $1"; }
+    local _arg1="$1"
+print_success() { echo -e "${GREEN}[SUCCESS]${NC} $_arg1"; }
+print_warning() { echo -e "${YELLOW}[WARNING]${NC} $_arg1"; }
+print_error() { echo -e "${RED}[ERROR]${NC} $_arg1"; }
+print_header() { echo -e "${PURPLE}[MONITOR]${NC} $_arg1"; }
 
 # Configuration
 readonly REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -65,6 +66,7 @@ check_sonarcloud() {
         print_error "Failed to fetch SonarCloud status"
         return 1
     fi
+    return 0
 }
 
 # Run Qlty analysis and auto-fix
@@ -88,6 +90,7 @@ run_qlty_analysis() {
         print_warning "Qlty analysis completed with warnings (API key may not be configured)"
         return 0
     fi
+    return 0
 }
 
 # Run Codacy analysis
@@ -144,6 +147,7 @@ run_codacy_analysis() {
         fi
         return 0 # Don't fail the whole monitor script
     fi
+    return 0
 }
 
 # Apply automatic fixes based on common patterns
@@ -210,15 +214,18 @@ monitor() {
     run_codacy_analysis
     apply_automatic_fixes
     generate_report
+    return 0
 }
 
 fix() {
     echo "Applying automatic fixes..."
     apply_automatic_fixes
+    return 0
 }
 
 report() {
     generate_report
+    return 0
 }
 
 # Main function
@@ -240,6 +247,7 @@ main() {
             exit 1
             ;;
     esac
+    return 0
 }
 
 main "$@"

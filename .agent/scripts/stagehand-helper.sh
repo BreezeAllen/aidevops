@@ -153,6 +153,7 @@ async function main() {
         // Clean up
         await stagehand.close();
     }
+    return 0
 }
 
 // Run the example

@@ -56,6 +56,7 @@ check_markdownlint() {
     else
         return 1
     fi
+    return 0
 }
 
 # Install markdownlint-cli
@@ -78,6 +79,7 @@ install_markdownlint() {
         print_info "Visit: https://nodejs.org/"
         return 1
     fi
+    return 0
 }
 
 # Create markdownlint configuration
@@ -106,6 +108,7 @@ create_markdownlint_config() {
   "MD046": {
     "style": "fenced"
   }
+    return 0
 }
 EOF
     
@@ -257,13 +260,14 @@ show_help() {
 
 # Main function
 main() {
+    local _arg1="$1"
     local command="${1:-fix}"
     local target="${2:-.}"
 
     # Handle case where first argument is a file/directory
-    if [[ -f "$1" || -d "$1" ]]; then
+    if [[ -f "$_arg1" || -d "$_arg1" ]]; then
         command="fix"
-        target="$1"
+        target="$_arg1"
     fi
 
     case "$command" in
@@ -297,6 +301,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

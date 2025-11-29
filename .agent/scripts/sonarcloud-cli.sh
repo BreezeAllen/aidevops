@@ -15,10 +15,11 @@ readonly PURPLE='\033[0;35m'
 readonly NC='\033[0m'
 
 print_header() { echo -e "${PURPLE}🔍 $1${NC}"; }
-print_info() { echo -e "${BLUE}ℹ️  $1${NC}"; }
-print_success() { echo -e "${GREEN}✅ $1${NC}"; }
-print_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
-print_error() { echo -e "${RED}❌ $1${NC}"; }
+    local _arg1="$1"
+print_info() { echo -e "${BLUE}ℹ️  $_arg1${NC}"; }
+print_success() { echo -e "${GREEN}✅ $_arg1${NC}"; }
+print_warning() { echo -e "${YELLOW}⚠️  $_arg1${NC}"; }
+print_error() { echo -e "${RED}❌ $_arg1${NC}"; }
 
 # SonarCloud project configuration
 readonly SONAR_PROJECT_KEY="marcusquinn_aidevops"
@@ -45,6 +46,7 @@ check_sonar_scanner() {
             exit 1
         fi
     fi
+    return 0
 }
 
 # Run SonarCloud analysis
@@ -72,6 +74,7 @@ run_analysis() {
     
     print_success "SonarCloud analysis completed"
     print_info "View results at: $SONAR_URL/project/overview?id=$SONAR_PROJECT_KEY"
+    return 0
 }
 
 # Get project issues via API
@@ -109,6 +112,7 @@ get_issues() {
         print_error "Failed to fetch issues from SonarCloud API"
         exit 1
     fi
+    return 0
 }
 
 # Get project metrics
@@ -145,6 +149,7 @@ get_metrics() {
         print_error "Failed to fetch metrics from SonarCloud API"
         exit 1
     fi
+    return 0
 }
 
 # Main function

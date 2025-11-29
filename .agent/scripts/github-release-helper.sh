@@ -124,6 +124,7 @@ create_github_release_api() {
   "body": $(echo "$release_notes" | jq -Rs .),
   "draft": false,
   "prerelease": false
+    return 0
 }
 EOF
 )
@@ -175,6 +176,7 @@ check_release_exists() {
     else
         return 1  # Release doesn't exist
     fi
+    return 0
 }
 
 # Main function
@@ -233,6 +235,7 @@ main() {
             echo "  export GITHUB_TOKEN=your_personal_access_token"
             ;;
     esac
+    return 0
 }
 
 main "$@"

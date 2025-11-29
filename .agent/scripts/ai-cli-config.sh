@@ -21,22 +21,26 @@ readonly BLUE='\033[0;34m'
 readonly NC='\033[0m' # No Color
 
 log_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${BLUE}ℹ️  $_arg1${NC}"
     return 0
 }
 
 log_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    local _arg1="$1"
+    echo -e "${GREEN}✅ $_arg1${NC}"
     return 0
 }
 
 log_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${YELLOW}⚠️  $_arg1${NC}"
     return 0
 }
 
 log_error() {
-    echo -e "${RED}❌ $1${NC}"
+    local _arg1="$1"
+    echo -e "${RED}❌ $_arg1${NC}"
     return 0
 }
 
@@ -156,6 +160,7 @@ configure_claude_cli() {
     "~/AGENTS.md",
     "~/git/aidevops/AGENTS.md"
   ]
+    return 0
 }
 EOF
 
@@ -194,6 +199,7 @@ EOF
     "~/AGENTS.md",
     "~/git/aidevops/AGENTS.md"
   ]
+    return 0
 }
 EOF
 
@@ -284,6 +290,7 @@ EOF
     fi
 
     log_success "Windsurf IDE configuration completed"
+    return 0
 }
 
 # Function to create AI Shell configuration
@@ -309,6 +316,7 @@ configure_ai_shell() {
     "~/AGENTS.md",
     "~/git/aidevops/AGENTS.md"
   ]
+    return 0
 }
 EOF
 
@@ -412,6 +420,7 @@ alias droid-guided='droid "$(cat ~/AGENTS.md)"'
 EOF
 
     log_success "Shell aliases added to $shell_config"
+    return 0
 }
 
 # Function to create a universal AI wrapper script
@@ -503,6 +512,7 @@ main() {
             exit 1
             ;;
     esac
+    return 0
 }
 
 main "$@"
@@ -800,6 +810,7 @@ main() {
     echo "  1. Restart your shell: source ~/.zshrc (or ~/.bashrc)"
     echo "  2. Test with: aider-guided --help"
     echo "  3. Try: ai-with-context aider"
+    return 0
 }
 
 # Run main function

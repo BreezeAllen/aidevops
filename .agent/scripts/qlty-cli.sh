@@ -15,27 +15,32 @@ readonly BLUE='\033[0;34m'
 readonly NC='\033[0m'
 
 print_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    local _arg1="$1"
+    echo -e "${GREEN}✅ $_arg1${NC}"
     return 0
 }
 
 print_error() {
-    echo -e "${RED}❌ $1${NC}" >&2
+    local _arg1="$1"
+    echo -e "${RED}❌ $_arg1${NC}" >&2
     return 0
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${YELLOW}⚠️  $_arg1${NC}"
     return 0
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${BLUE}ℹ️  $_arg1${NC}"
     return 0
 }
 
 print_header() {
-    echo -e "${BLUE}🚀 $1${NC}"
+    local _arg1="$1"
+    echo -e "${BLUE}🚀 $_arg1${NC}"
     echo "=========================================="
     return 0
 }
@@ -88,6 +93,7 @@ load_api_config() {
         print_info "  export QLTY_WORKSPACE_ID=\"your-workspace-id\""
         return 1
     fi
+    return 0
 }
 
 # Install Qlty CLI
@@ -121,6 +127,7 @@ install_qlty() {
         print_error "Failed to install Qlty CLI"
         return 1
     fi
+    return 0
 }
 
 # Initialize Qlty in repository
@@ -148,6 +155,7 @@ init_qlty() {
         print_error "Failed to initialize Qlty"
         return 1
     fi
+    return 0
 }
 
 # Run Qlty check (linting)
@@ -213,6 +221,7 @@ format_qlty() {
         print_error "Auto-formatting failed"
         return 1
     fi
+    return 0
 }
 
 # Run Qlty code smells detection
@@ -307,6 +316,7 @@ show_help() {
 
 # Main execution
 main() {
+    local _arg2="$2"
     local command="$1"
     shift
     
@@ -318,13 +328,13 @@ main() {
             init_qlty
             ;;
         "check")
-            check_qlty "$1" "$2"
+            check_qlty "$1" "$_arg2"
             ;;
         "fmt")
-            format_qlty "$1" "$2"
+            format_qlty "$1" "$_arg2"
             ;;
         "smells")
-            smells_qlty "$1" "$2"
+            smells_qlty "$1" "$_arg2"
             ;;
         "help"|"--help"|"-h"|"")
             show_help
@@ -336,6 +346,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 main "$@"

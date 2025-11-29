@@ -18,32 +18,38 @@ readonly CYAN='\033[0;36m'
 readonly NC='\033[0m'
 
 print_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    local _arg1="$1"
+    echo -e "${GREEN}✅ $_arg1${NC}"
     return 0
 }
 
 print_error() {
-    echo -e "${RED}❌ $1${NC}" >&2
+    local _arg1="$1"
+    echo -e "${RED}❌ $_arg1${NC}" >&2
     return 0
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${YELLOW}⚠️  $_arg1${NC}"
     return 0
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${BLUE}ℹ️  $_arg1${NC}"
     return 0
 }
 
 print_question() {
-    echo -e "${CYAN}❓ $1${NC}"
+    local _arg1="$1"
+    echo -e "${CYAN}❓ $_arg1${NC}"
     return 0
 }
 
 print_header() {
-    echo -e "${PURPLE}🔧 $1${NC}"
+    local _arg1="$1"
+    echo -e "${PURPLE}🔧 $_arg1${NC}"
     echo "=========================================="
     return 0
 }
@@ -76,6 +82,7 @@ ask_yes_no() {
                 ;;
         esac
     done
+    return 0
 }
 
 # Ask multiple choice question
@@ -101,6 +108,7 @@ ask_choice() {
             print_warning "Please enter a number between 1 and ${#options[@]}"
         fi
     done
+    return 0
 }
 
 # Assess development environment and needs
@@ -363,6 +371,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 main "$@"

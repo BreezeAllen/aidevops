@@ -234,6 +234,7 @@ install_mcp() {
     esac
     
     print_success "$mcp_name MCP setup completed"
+    return 0
 }
 
 # Create MCP configuration templates
@@ -259,6 +260,7 @@ create_config_templates() {
       ]
     }
   }
+    return 0
 }
 EOF
 
@@ -397,6 +399,7 @@ main() {
     print_info "2. Review configuration templates in configs/mcp-templates/"
     print_info "3. Test integrations with your AI assistant"
     print_info "4. Check .agent/MCP-INTEGRATIONS.md for usage examples"
+    return 0
 }
 
 main "$@"

@@ -69,6 +69,7 @@ check_localwp() {
         print_info "LocalWP not found - standalone mode"
         return 1
     fi
+    return 0
 }
 
 # Detect web application type and default port
@@ -234,6 +235,7 @@ add_to_hosts() {
     print_info "Adding $domain to /etc/hosts (requires sudo)..."
     echo "127.0.0.1 $domain" | sudo tee -a /etc/hosts > /dev/null
     print_success "Domain added to hosts file"
+    return 0
 }
 
 # Reload nginx
@@ -324,6 +326,7 @@ setup_domain() {
     echo "   - HTTP redirect: http://$domain → https://$domain"
     echo "   - HTTPS access: https://$domain shows your app"
     echo ""
+    return 0
 }
 
 # List configured domains
@@ -401,6 +404,7 @@ remove_domain() {
     fi
 
     print_success "Domain removal complete!"
+    return 0
 }
 
 # Show help

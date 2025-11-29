@@ -75,6 +75,7 @@ log() {
 }
 
 rotate_logs() {
+    local _arg1="$1"
     log "INFO" "Checking log retention policy (${RETENTION_DAYS_LOGS} days)..."
     
     if [[ ! -f "$LOG_FILE" ]]; then
@@ -110,7 +111,7 @@ rotate_logs() {
     
     # Filter the log file: Keep lines where date >= cutoff_date
     # This is a string comparison which works for ISO 8601 dates
-    awk -v cutoff="$cutoff_date" '$1 >= cutoff' "$LOG_FILE" > "$temp_log"
+    awk -v cutoff="$cutoff_date" '$_arg1 >= cutoff' "$LOG_FILE" > "$temp_log"
     
     mv "$temp_log" "$LOG_FILE"
     
@@ -278,9 +279,10 @@ show_help() {
 }
 
 main() {
+    local _arg1="$1"
     # Parse arguments
     while [[ $# -gt 0 ]]; do
-        case "$1" in
+        case "$_arg1" in
             --force)
                 DRY_RUN=false
                 shift
@@ -294,7 +296,7 @@ main() {
                 exit 0
                 ;;
             *)
-                log "ERROR" "Unknown option: $1"
+                log "ERROR" "Unknown option: $_arg1"
                 show_help
                 exit 1
                 ;;

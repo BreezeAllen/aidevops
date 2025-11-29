@@ -130,6 +130,7 @@ fix_return_statements() {
 }
 
 fix_positional_parameters() {
+    local _arg1="$1"
     print_info "Fixing positional parameter violations (S7679)..."
     
     local files_fixed=0
@@ -153,7 +154,7 @@ fix_positional_parameters() {
                 }' "$file" > "$temp_file"
                 
                 # Replace direct positional parameter usage in case statements
-                sed -i '' 's/\$1/$command/g; s/\$2/$account_name/g; s/\$3/$target/g; s/\$4/$options/g' "$temp_file"
+                sed -i '' 's/\$_arg1/$command/g; s/\$2/$account_name/g; s/\$3/$target/g; s/\$4/$options/g' "$temp_file"
                 
                 if ! diff -q "$file" "$temp_file" > /dev/null; then
                     mv "$temp_file" "$file"
@@ -181,14 +182,14 @@ analyze_string_literals() {
             echo "=== $file ===" >> "$constants_file"
             
             # Find repeated strings (3+ occurrences)
-            (grep -o '"[^"]*"' "$file" || true) | sort | uniq -c | sort -nr | awk '$1 >= 3 {
+            (grep -o '"[^"]*"' "$file" || true) | sort | uniq -c | sort -nr | awk '$_arg1 >= 3 {
                 gsub(/"/, "", $2)
                 constant_name = toupper($2)
                 gsub(/[^A-Z0-9_]/, "_", constant_name)
                 gsub(/_+/, "_", constant_name)
                 gsub(/^_|_$/, "", constant_name)
                 if (length(constant_name) > 0) {
-                    printf "readonly %s=\"%s\"  # Used %d times\n", constant_name, $2, $1
+                    printf "readonly %s=\"%s\"  # Used %d times\n", constant_name, $2, $_arg1
                 }
             }' >> "$constants_file"
             

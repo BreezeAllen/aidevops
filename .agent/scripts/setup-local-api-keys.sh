@@ -15,22 +15,26 @@ readonly RED='\033[0;31m'
 readonly NC='\033[0m'
 
 print_success() {
-    echo -e "${GREEN}[OK] $1${NC}"
+    local _arg1="$1"
+    echo -e "${GREEN}[OK] $_arg1${NC}"
     return 0
 }
 
 print_info() {
-    echo -e "${BLUE}[INFO] $1${NC}"
+    local _arg1="$1"
+    echo -e "${BLUE}[INFO] $_arg1${NC}"
     return 0
 }
 
 print_warning() {
-    echo -e "${YELLOW}[WARN] $1${NC}"
+    local _arg1="$1"
+    echo -e "${YELLOW}[WARN] $_arg1${NC}"
     return 0
 }
 
 print_error() {
-    echo -e "${RED}[ERROR] $1${NC}"
+    local _arg1="$1"
+    echo -e "${RED}[ERROR] $_arg1${NC}"
     return 0
 }
 
@@ -106,6 +110,7 @@ setup_shell_integration() {
 service_to_env_var() {
     local service="$1"
     echo "$service" | tr '[:lower:]-' '[:upper:]_'
+    return 0
 }
 
 # Parse export command (e.g., 'export VERCEL_TOKEN="xxx"' -> extracts var name and value)
@@ -127,6 +132,7 @@ parse_export_command() {
     
     echo "$var_name"
     echo "$value"
+    return 0
 }
 
 # Set API key securely
@@ -189,6 +195,7 @@ set_api_key() {
 # Add command - alias for set, better for pasting export commands
 add_api_key() {
     set_api_key "$@"
+    return 0
 }
 
 # Get API key
@@ -228,6 +235,7 @@ get_api_key() {
         print_warning "API key for $service ($env_var) not found"
         return 1
     fi
+    return 0
 }
 
 # List configured services (without showing keys)
@@ -277,6 +285,7 @@ show_help() {
     echo "  vercel-token    ->  VERCEL_TOKEN"
     echo "  supabase-key    ->  SUPABASE_KEY"
     echo "  DIRECT_NAME     ->  DIRECT_NAME (kept as-is)"
+    return 0
 }
 
 # Main execution

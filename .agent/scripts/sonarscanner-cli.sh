@@ -71,6 +71,7 @@ check_sonar_scanner() {
         print_warning "SonarScanner CLI not found"
         return 1
     fi
+    return 0
 }
 
 # Install SonarScanner CLI
@@ -203,6 +204,7 @@ install_sonar_scanner() {
         print_error "Installation verification failed"
         return 1
     fi
+    return 0
 }
 
 # Initialize SonarQube project configuration
@@ -273,6 +275,7 @@ EOF
         print_error "Configuration creation failed"
         return 1
     fi
+    return 0
 }
 
 # Run SonarQube analysis
@@ -337,6 +340,7 @@ run_sonar_analysis() {
         print_error "SonarQube analysis failed"
         return 1
     fi
+    return 0
 }
 
 # Show CLI status
@@ -442,6 +446,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

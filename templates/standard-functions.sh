@@ -170,6 +170,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Note: Individual scripts should implement:

@@ -13,12 +13,14 @@ readonly BLUE='\033[0;34m'
 readonly NC='\033[0m'
 
 print_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    local _arg1="$1"
+    echo -e "${GREEN}✅ $_arg1${NC}"
     return 0
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
+    local _arg1="$1"
+    echo -e "${BLUE}ℹ️  $_arg1${NC}"
     return 0
 }
 
@@ -74,6 +76,7 @@ fix_sc2155_simple() {
         print_info "No fixable SC2155 patterns in: $file"
         return 1
     fi
+    return 0
 }
 
 # Main execution

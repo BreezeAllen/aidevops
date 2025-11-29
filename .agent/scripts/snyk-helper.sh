@@ -253,6 +253,7 @@ install_snyk() {
         print_error "Installation failed"
         return 1
     fi
+    return 0
 }
 
 # ------------------------------------------------------------------------------
@@ -294,6 +295,7 @@ authenticate() {
         print_info "Get your API token from: https://app.snyk.io/account"
         return 1
     fi
+    return 0
 }
 
 # ------------------------------------------------------------------------------
@@ -665,6 +667,7 @@ create_monitor() {
         print_error "Failed to create monitoring snapshot"
         return 1
     fi
+    return 0
 }
 
 # ------------------------------------------------------------------------------
@@ -707,6 +710,7 @@ generate_sbom() {
         print_error "Failed to generate SBOM"
         return 1
     fi
+    return 0
 }
 
 # ------------------------------------------------------------------------------
@@ -758,6 +762,7 @@ full_scan() {
         print_success "All scans completed - no security issues found"
         return 0
     fi
+    return 0
 }
 
 # ------------------------------------------------------------------------------
@@ -781,6 +786,7 @@ start_mcp_server() {
     
     # The Snyk MCP server runs as: snyk mcp
     exec snyk mcp
+    return 0
 }
 
 # ------------------------------------------------------------------------------

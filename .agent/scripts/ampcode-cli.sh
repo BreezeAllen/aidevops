@@ -107,6 +107,7 @@ check_ampcode_cli() {
         print_info "Expected CLI command: amp"
         return 1
     fi
+    return 0
 }
 
 # Install AmpCode CLI
@@ -163,6 +164,7 @@ install_ampcode_cli() {
         print_info "Alternative: Visit https://ampcode.com to download CLI"
         return 1
     fi
+    return 0
 }
 
 # Setup AmpCode configuration
@@ -188,6 +190,7 @@ setup_ampcode_config() {
     "severity_threshold": "medium",
     "focus_areas": ["security", "performance", "maintainability"]
   }
+    return 0
 }
 EOF
 
@@ -261,6 +264,7 @@ run_code_scan() {
         print_error "Code scan failed after ${duration}s"
         return 1
     fi
+    return 0
 }
 
 # Get AI code review
@@ -319,6 +323,7 @@ get_ai_review() {
         print_error "AI review failed after ${duration}s"
         return 1
     fi
+    return 0
 }
 
 # Apply AI-suggested fixes
@@ -390,6 +395,7 @@ apply_fixes() {
         print_error "Fix analysis failed after ${duration}s"
         return 1
     fi
+    return 0
 }
 
 # Show AmpCode status
@@ -470,6 +476,8 @@ show_help() {
 
 # Main function
 main() {
+    local _arg2="$2"
+    local _arg3="$3"
     local command="${1:-help}"
 
     # Ensure temp directory exists
@@ -483,16 +491,16 @@ main() {
             setup_ampcode_config
             ;;
         "scan")
-            run_code_scan "$2" "$3"
+            run_code_scan "$_arg2" "$_arg3"
             ;;
         "review")
-            get_ai_review "$2" "$3"
+            get_ai_review "$_arg2" "$_arg3"
             ;;
         "fix")
-            if [[ "$2" == "--auto-apply" ]]; then
-                apply_fixes "$3" "true"
+            if [[ "$_arg2" == "--auto-apply" ]]; then
+                apply_fixes "$_arg3" "true"
             else
-                apply_fixes "$2" "false"
+                apply_fixes "$_arg2" "false"
             fi
             ;;
         "status")
@@ -507,6 +515,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

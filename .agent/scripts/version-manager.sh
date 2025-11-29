@@ -63,6 +63,7 @@ bump_version() {
     local new_version="$major.$minor.$patch"
     echo "$new_version" > "$VERSION_FILE"
     echo "$new_version"
+    return 0
 }
 
 # Function to validate version consistency across files
@@ -126,6 +127,7 @@ validate_version_consistency() {
         print_error "Found $errors version inconsistencies"
         return 1
     fi
+    return 0
 }
 
 # Function to update version in files
@@ -175,6 +177,7 @@ update_version_in_files() {
     else
         print_warning "README.md not found, skipping version badge update"
     fi
+    return 0
 }
 
 # Function to create git tag
@@ -193,6 +196,7 @@ create_git_tag() {
         print_error "Failed to create git tag"
         return 1
     fi
+    return 0
 }
 
 # Function to create GitHub release
@@ -237,6 +241,7 @@ create_github_release() {
             return 0
         fi
     fi
+    return 0
 }
 
 # Function to generate release notes
@@ -399,6 +404,7 @@ main() {
             echo "  $0 validate"
             ;;
     esac
+    return 0
 }
 
 main "$@"

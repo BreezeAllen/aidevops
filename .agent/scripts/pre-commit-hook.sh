@@ -43,6 +43,8 @@ get_modified_shell_files() {
 }
 
 validate_return_statements() {
+    local _arg1="$1"
+    local _arg2="$2"
     local violations=0
     
     print_info "Validating return statements..."
@@ -91,11 +93,11 @@ validate_string_literals() {
         if [[ -f "$file" ]]; then
             # Check for repeated string literals
             local repeated
-            repeated=$(grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$1 >= 3' | wc -l || echo "0")
+            repeated=$(grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$_arg1 >= 3' | wc -l || echo "0")
             
             if [[ $repeated -gt 0 ]]; then
                 print_warning "Repeated string literals in $file (consider using constants)"
-                grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$1 >= 3 {print "  " $1 "x: " $2}' | head -3
+                grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$_arg1 >= 3 {print "  " $_arg1 "x: " $_arg2}' | head -3
                 ((violations++))
             fi
         fi

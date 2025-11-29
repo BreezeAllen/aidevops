@@ -112,6 +112,7 @@ validate_version_consistency() {
         fi
         return 1
     fi
+    return 0
 }
 
 # Main function

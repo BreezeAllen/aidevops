@@ -141,6 +141,7 @@ process_directory() {
         print_info "No formatting issues found"
         return 0
     fi
+    return 0
 }
 
 # Advanced markdown fixes
@@ -215,6 +216,7 @@ apply_advanced_fixes() {
         rm "$temp_file"
         return 1
     fi
+    return 0
 }
 
 # Clean up backup files
@@ -277,13 +279,14 @@ show_help() {
 
 # Main function
 main() {
+    local _arg1="$1"
     local command="${1:-format}"
     local target="${2:-.}"
 
     # Handle case where first argument is a file/directory
-    if [[ -f "$1" || -d "$1" ]]; then
+    if [[ -f "$_arg1" || -d "$_arg1" ]]; then
         command="format"
-        target="$1"
+        target="$_arg1"
     fi
 
     case "$command" in
@@ -326,6 +329,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

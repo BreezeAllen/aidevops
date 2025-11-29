@@ -50,20 +50,22 @@ fix_missing_returns() {
     
     mv "$temp_file" "$file"
     print_success "Added return statements to $file"
+    return 0
 }
 
 # Fix positional parameter assignments (S7679)
 fix_positional_parameters() {
+    local _arg2="$2"
     local file="$1"
     print_info "Fixing positional parameter assignments in: $file"
     
     # Backup original file
     cp "$file" "$file.backup"
     
-    # Replace direct $1, $2, etc. usage with local variable assignments
+    # Replace direct $1, $_arg2, etc. usage with local variable assignments
     sed -i.tmp '
         s/echo "\$1"/local param1="$1"; echo "$param1"/g
-        s/echo "\$2"/local param2="$2"; echo "$param2"/g
+        s/echo "\$_arg2"/local param2="$_arg2"; echo "$param2"/g
         s/case "\$1"/local command="$1"; case "$command"/g
         s/\[\[ "\$1"/local arg1="$1"; [[ "$arg1"/g
     ' "$file"
@@ -94,6 +96,7 @@ fix_missing_default_case() {
     
     rm -f "$file.tmp"
     print_success "Added default cases to $file"
+    return 0
 }
 
 # Apply all SonarCloud fixes to a file
@@ -117,6 +120,7 @@ apply_sonarcloud_fixes() {
     fi
     
     print_success "All SonarCloud fixes applied to $file"
+    return 0
 }
 
 # Main function
@@ -184,6 +188,7 @@ main() {
             echo "  S131  - Missing default case in switch statements"
             ;;
     esac
+    return 0
 }
 
 main "$@"

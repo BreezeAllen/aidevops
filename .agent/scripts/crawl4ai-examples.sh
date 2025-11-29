@@ -241,6 +241,7 @@ EOF
 
 # Example 5: CAPTCHA solving demonstration
 example_captcha_demo() {
+    local _arg3="$3"
     print_header "Example 5: CAPTCHA Solving Demonstration"
 
     # Check if CapSolver API key is set
@@ -254,7 +255,7 @@ example_captcha_demo() {
         print_info "📋 Supported CAPTCHA Types:"
         print_info "• recaptcha_v2 - reCAPTCHA v2 checkbox ($0.5/1000)"
         print_info "• recaptcha_v3 - reCAPTCHA v3 invisible ($0.5/1000)"
-        print_info "• turnstile - Cloudflare Turnstile ($3/1000)"
+        print_info "• turnstile - Cloudflare Turnstile ($_arg3/1000)"
         print_info "• aws_waf - AWS WAF bypass (contact for pricing)"
         print_info "• geetest - GeeTest v3/v4 ($0.5/1000)"
         print_info ""

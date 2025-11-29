@@ -120,6 +120,7 @@ show_progress() {
         print_warning "No progress file found"
         return 1
     fi
+    return 0
 }
 
 # Check if Codacy CLI is ready
@@ -460,6 +461,7 @@ run_tool_analysis() {
         update_progress "$tool analysis failed"
         return 1
     fi
+    return 0
 }
 
 # Show analysis status
@@ -528,6 +530,7 @@ show_help() {
 
 # Main function
 main() {
+    local _arg2="$2"
     local command="${1:-help}"
 
     # Ensure temp directory exists
@@ -552,7 +555,7 @@ main() {
             list_tools
             ;;
         "analyze")
-            run_tool_analysis "$2"
+            run_tool_analysis "$_arg2"
             ;;
         "status")
             show_status
@@ -569,6 +572,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

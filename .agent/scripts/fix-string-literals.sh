@@ -67,6 +67,7 @@ find_repeated_strings() {
 
 # Find repeated strings across all shell files
 analyze_repeated_strings() {
+    local _arg1="$1"
     local target_dir="${1:-.}"
     
     print_header "Analyzing Repeated String Literals"
@@ -85,7 +86,7 @@ analyze_repeated_strings() {
     
     cut -d':' -f2- "$temp_file" | \
     sort | uniq -c | \
-    awk '$1 >= 3 {print $1, $0}' | \
+    awk '$_arg1 >= 3 {print $_arg1, $0}' | \
     sort -nr | head -20
     
     rm "$temp_file"
@@ -170,6 +171,7 @@ create_string_constants() {
         print_info "No repeated strings found requiring constants in $file"
         return 1
     fi
+    return 0
 }
 
 # Process directory for string literal fixes
@@ -226,13 +228,14 @@ show_help() {
 
 # Main function
 main() {
+    local _arg1="$1"
     local command="${1:-analyze}"
     local target="${2:-.}"
 
     # Handle case where first argument is a file/directory
-    if [[ -f "$1" || -d "$1" ]]; then
+    if [[ -f "$_arg1" || -d "$_arg1" ]]; then
         command="analyze"
-        target="$1"
+        target="$_arg1"
     fi
 
     case "$command" in
@@ -265,6 +268,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

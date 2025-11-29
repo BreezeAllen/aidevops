@@ -177,6 +177,7 @@ fix_common_strings_in_file() {
         print_info "No repeated strings requiring fixes in: $file"
         return 1
     fi
+    return 0
 }
 
 # Process directory for common string fixes
@@ -246,6 +247,7 @@ main() {
         print_info "Use: $0 help for usage information"
         return 1
     fi
+    return 0
 }
 
 # Execute main function with all arguments

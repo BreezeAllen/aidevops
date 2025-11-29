@@ -94,6 +94,7 @@ load_api_config() {
         fi
         return 1
     fi
+    return 0
 }
 
 print_error() {
@@ -119,6 +120,7 @@ check_codacy_cli() {
         print_warning "Codacy CLI not found"
         return 1
     fi
+    return 0
 }
 
 # Install Codacy CLI v2
@@ -158,6 +160,7 @@ install_codacy_cli() {
         print_error "Installation failed"
         return 1
     fi
+    return 0
 }
 
 # Initialize Codacy configuration
@@ -186,6 +189,7 @@ init_codacy_config() {
         print_error "Configuration initialization failed"
         return 1
     fi
+    return 0
 }
 
 # Install tools and runtimes
@@ -207,6 +211,7 @@ install_codacy_tools() {
         print_error "Tool installation failed"
         return 1
     fi
+    return 0
 }
 
 # Run code analysis
@@ -260,6 +265,7 @@ run_codacy_analysis() {
         print_error "Code analysis failed"
         return 1
     fi
+    return 0
 }
 
 # Upload SARIF results to Codacy
@@ -311,6 +317,7 @@ upload_codacy_results() {
         print_error "Upload failed"
         return 1
     fi
+    return 0
 }
 
 # Show CLI status
@@ -391,6 +398,9 @@ show_help() {
 
 # Main function
 main() {
+    local _arg2="$2"
+    local _arg3="$3"
+    local _arg4="$4"
     local command="${1:-help}"
 
     case "$command" in
@@ -404,10 +414,10 @@ main() {
             install_codacy_tools
             ;;
         "analyze")
-            run_codacy_analysis "$2" "$3" "$4"
+            run_codacy_analysis "$_arg2" "$_arg3" "$_arg4"
             ;;
         "upload")
-            upload_codacy_results "$2" "$3"
+            upload_codacy_results "$_arg2" "$_arg3"
             ;;
         "status")
             show_codacy_status
@@ -421,6 +431,7 @@ main() {
             return 1
             ;;
     esac
+    return 0
 }
 
 # Execute main function with all arguments

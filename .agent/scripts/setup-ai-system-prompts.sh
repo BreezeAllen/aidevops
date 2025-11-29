@@ -15,10 +15,11 @@ readonly PURPLE='\033[0;35m'
 readonly NC='\033[0m'
 
 print_header() { echo -e "${PURPLE}🤖 $1${NC}"; }
-print_info() { echo -e "${BLUE}ℹ️  $1${NC}"; }
-print_success() { echo -e "${GREEN}✅ $1${NC}"; }
-print_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
-print_error() { echo -e "${RED}❌ $1${NC}"; }
+    local _arg1="$1"
+print_info() { echo -e "${BLUE}ℹ️  $_arg1${NC}"; }
+print_success() { echo -e "${GREEN}✅ $_arg1${NC}"; }
+print_warning() { echo -e "${YELLOW}⚠️  $_arg1${NC}"; }
+print_error() { echo -e "${RED}❌ $_arg1${NC}"; }
 
 # Framework path
 readonly FRAMEWORK_PATH="$HOME/git/aidevops"
@@ -40,6 +41,7 @@ check_framework() {
     fi
     
     print_success "Framework found at $FRAMEWORK_PATH"
+    return 0
 }
 
 # Configure Augment Code (Auggie)
@@ -70,6 +72,7 @@ configure_augment() {
     else
         print_info "Augment system prompt already configured"
     fi
+    return 0
 }
 
 # Configure Claude Desktop
@@ -90,6 +93,7 @@ configure_claude() {
 {
   "systemPrompt": "$SYSTEM_PROMPT",
   "workingDirectory": "$FRAMEWORK_PATH"
+    return 0
 }
 EOF
         print_success "Created Claude Desktop configuration"
@@ -120,6 +124,7 @@ configure_warp() {
     else
         print_warning "Could not create Warp workflow. Please configure manually."
     fi
+    return 0
 }
 
 # Show manual configuration instructions
