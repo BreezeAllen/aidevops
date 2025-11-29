@@ -1,6 +1,54 @@
 # AI DevOps Framework - Agent Guidance
 
-**🔒 AUTHORITATIVE SOURCE: This is the single source of truth for all AI assistant instructions. All other AGENTS.md files are minimal templates that reference this file.**
+<!-- AI-CONTEXT-START -->
+
+## Quick Reference
+
+- **Purpose**: DevOps automation framework for AI agents across 29+ services
+- **Repo**: `~/git/aidevops/` (authoritative source for all AI instructions)
+- **Scripts**: `.agent/scripts/[service]-helper.sh [command] [account] [target]`
+- **Docs**: `.agent/*.md` (82 files with AI-CONTEXT blocks)
+- **Configs**: `configs/[service]-config.json` (gitignored, use `.json.txt` templates)
+
+**Critical Paths**:
+
+| Purpose | Location |
+|---------|----------|
+| Work files | `~/.agent/work/[project]/` |
+| Temp files | `~/.agent/tmp/session-*/` |
+| Credentials | `~/.config/aidevops/mcp-env.sh` (600 perms) |
+| API key setup | `.agent/scripts/setup-local-api-keys.sh set [service] [key]` |
+
+**Security Rules**:
+- NEVER create files in `~/` root
+- NEVER expose credentials in output/logs
+- Confirm destructive operations before execution
+- Store secrets ONLY in `~/.config/aidevops/mcp-env.sh`
+
+**Quality Standards** (A-grade required):
+- SonarCloud, CodeFactor, Codacy compliance
+- ShellCheck zero violations
+- Use `local var="$1"` not `$1` directly (S7679)
+- Explicit `return 0/1` in all functions (S7682)
+
+**Key Commands**:
+
+```bash
+# Quality check
+.agent/scripts/quality-check.sh
+
+# Version release
+.agent/scripts/version-manager.sh release [major|minor|patch]
+
+# API key storage
+.agent/scripts/setup-local-api-keys.sh set [service] [key]
+```
+
+**Services**: Hostinger, Hetzner, Cloudflare, GitHub/GitLab/Gitea CLIs, MainWP, Vaultwarden, SonarCloud, Codacy, CodeRabbit, Snyk, Crawl4AI, 9 MCP integrations
+
+<!-- AI-CONTEXT-END -->
+
+**AUTHORITATIVE SOURCE**: This is the single source of truth for all AI assistant instructions. All other AGENTS.md files are minimal templates that reference this file.
 
 This repository provides a comprehensive DevOps infrastructure management framework designed specifically for AI agent automation across 29+ services.
 
@@ -538,13 +586,11 @@ bash ~/git/aidevops/.agent/scripts/qlty-cli.sh check 10 mycompany
 1. **Account API Key** (`qltp_...`) - **Preferred** for account-wide access to all workspaces
 2. **Coverage Token** (`qltcw_...`) - Organization-specific access when account key unavailable
 
-**📊 Current Qlty Configuration:**
+**📊 Qlty Configuration Status:**
 
-- **🌟 Account API Key**: ✅ `REDACTED_API_KEY` (account-wide access)
-- **marcusquinn Organization**: ✅ Coverage Token + Workspace ID configured
-  - **Coverage Token**: `REDACTED_COVERAGE_TOKEN` (fallback if needed)
-  - **Workspace ID**: `REDACTED_WORKSPACE_ID` (organization context)
-- **Smart Selection**: Account API Key used for broader access, workspace ID for context
+- **Account API Key**: Store via `setup-local-api-keys.sh set qlty-account-api-key YOUR_KEY`
+- **Organization Tokens**: Store via `setup-local-api-keys.sh set qlty-ORGNAME YOUR_TOKEN`
+- **Verify Setup**: `setup-local-api-keys.sh list` (keys never displayed)
 
 **🌟 QLTY FEATURES:**
 
@@ -739,30 +785,7 @@ local used_variable="$1"
 # Don't declare: local unused_variable="$2"  # This causes S1481
 ```
 
-**🎯 QUALITY RULE COMPLIANCE:**
-
-**S7682 - Return Statements (83 issues remaining):**
-
-- EVERY function MUST end with explicit `return 0` or `return 1`
-- NO function should end without a return statement
-- Use `return 0` for success, `return 1` for errors
-
-**S7679 - Positional Parameters (79 issues remaining):**
-
-- NEVER use `$1`, `$2`, `$3` directly in function bodies
-- ALWAYS assign to local variables: `local param="$1"`
-- Apply to ALL functions including main() and case statements
-
-**S1192 - String Literals (3 issues remaining):**
-
-- Define constants for any string used 3+ times
-- Use `readonly CONSTANT_NAME="value"` at file top
-- Replace all occurrences with `$CONSTANT_NAME`
-
-**S1481 - Unused Variables (0 issues - maintain):**
-
-- Remove any declared but unused local variables
-- Only declare variables that are actually used in the function
+**See "Quality Targets & Progress" section below for current rule compliance status.**
 
 ### **Framework Architecture**
 
@@ -1141,37 +1164,6 @@ for file in .agent/scripts/*.sh; do
     grep -o '"[^"]*"' "$file" | sort | uniq -c | sort -nr | head -10
 done
 ```
-
-### **📊 QUALITY MONITORING**
-
-**Current Status (Target: Zero Issues):**
-
-- **SonarCloud**: 165 issues (down from 349) - 52.7% reduction achieved
-- **Return Statements**: 83 remaining (18% reduction from 101+)
-- **Positional Parameters**: 79 remaining (29% reduction from 111+)
-- **String Literals**: 3 remaining (70% reduction from 10+)
-- **Technical Debt**: 573 minutes (28% reduction from 805)
-
-### **🏆 QUALITY TARGETS (MANDATORY)**
-
-- **SonarCloud**: A-grades maintained, <100 total issues
-- **CodeFactor**: A-grade overall, 85%+ A-grade files
-- **Return Statements**: Zero S7682 violations
-- **Positional Parameters**: Zero S7679 violations
-- **String Literals**: Zero S1192 violations
-- **Unused Variables**: Zero S1481 violations (maintained)
-
-## 🎯 **Agent Success Metrics**
-
-### **Quality Excellence (ACHIEVED)**
-
-- **184+ Quality Issues Resolved**: Universal multi-platform improvements
-- **52.7% Issue Reduction**: From 349 to 165 issues (SonarCloud)
-- **Perfect A-Grade CodeFactor**: 84.6% A-grade files maintained
-- **28% Technical Debt Reduction**: From 805 to 573 minutes
-- **Zero Security Vulnerabilities**: Enterprise-grade validation
-- **Multi-Platform Excellence**: SonarCloud + CodeFactor + Codacy compliance
-- **Universal Fix Approach**: Common issues resolved across all platforms
 
 ### **Operational Excellence**
 
