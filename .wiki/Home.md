@@ -32,3 +32,4 @@ The AI DevOps Framework provides:
 Current version: **v2.0.0**
 
 See [CHANGELOG](https://github.com/marcusquinn/aidevops/blob/main/CHANGELOG.md) for release history.
+
