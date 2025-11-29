@@ -96,7 +96,7 @@ bash .agent/scripts/setup-local-api-keys.sh list
 > **You:** I want to deploy a WordPress site on Hostinger
 >
 > **AI:** I'll help you deploy WordPress on Hostinger. Let me check the framework documentation...
-> 
+>
 > *AI reads `.agent/hostinger.md` and uses `hostinger-helper.sh`*
 >
 > **AI:** I found the Hostinger helper. First, let's verify your account is configured...
@@ -129,6 +129,7 @@ The framework creates organized working directories:
 ### AI Can't Find AGENTS.md
 
 Ensure the repository is at the standard location:
+
 ```bash
 ls ~/git/aidevops/AGENTS.md
 ```
