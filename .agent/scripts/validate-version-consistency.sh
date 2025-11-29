@@ -11,11 +11,10 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)" || exit
 VERSION_FILE="$REPO_ROOT/VERSION"
 
 # Color output functions
-print_success() { echo -e "\033[32m✅ $1\033[0m"; }
-    local _arg1="$1"
-print_error() { echo -e "\033[31m❌ $_arg1\033[0m"; }
-print_warning() { echo -e "\033[33m⚠️  $_arg1\033[0m"; }
-print_info() { echo -e "\033[34mℹ️  $_arg1\033[0m"; }
+print_success() { local msg="$1"; echo -e "\033[32m✅ $msg\033[0m"; }
+print_error() { local msg="$1"; echo -e "\033[31m❌ $msg\033[0m"; }
+print_warning() { local msg="$1"; echo -e "\033[33m⚠️  $msg\033[0m"; }
+print_info() { local msg="$1"; echo -e "\033[34mℹ️  $msg\033[0m"; }
 
 # Function to get current version
 get_current_version() {
