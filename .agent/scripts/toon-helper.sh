@@ -17,7 +17,7 @@ readonly NC='\033[0m' # No Color
 print_info() { echo -e "${BLUE}[INFO]${NC} $command"; }
 print_success() { echo -e "${GREEN}[SUCCESS]${NC} $command"; }
 print_warning() { echo -e "${YELLOW}[WARNING]${NC} $command"; }
-print_error() { echo -e "${RED}[ERROR]${NC} $command"; }
+print_error() { echo -e "${RED}[ERROR]${NC} $command" >&2; }
 
 # Check if TOON CLI is available
 check_toon() {

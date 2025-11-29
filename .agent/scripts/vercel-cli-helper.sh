@@ -195,7 +195,7 @@ list_env_vars() {
 
 add_env_var() {
     local account_name="$1"
-    local project_name="$2"
+    local _project_name="$2"
     local var_name="$3"
     local var_value="$4"
     local environment="${5:-development}"
@@ -226,7 +226,7 @@ add_env_var() {
 
 remove_env_var() {
     local account_name="$1"
-    local project_name="$2"
+    local _project_name="$2"
     local var_name="$3"
     local environment="${4:-development}"
 
@@ -320,7 +320,7 @@ add_domain() {
 # ------------------------------------------------------------------------------
 
 start_dev_server() {
-    local account_name="$1"
+    local _account_name="$1"
     local project_path="${2:-.}"
     local port="${3:-3000}"
     local token="${4:-}"
@@ -354,7 +354,7 @@ start_dev_server() {
 }
 
 start_local_dev_server() {
-    local project_path="$1"
+    local _project_path="$1"
     local port="$2"
 
     print_info "Starting local development server (no Vercel authentication required)"
@@ -411,7 +411,7 @@ start_local_dev_server() {
 }
 
 build_project() {
-    local account_name="$1"
+    local _account_name="$1"
     local project_path="${2:-.}"
     local token="${3:-}"
 
@@ -452,7 +452,7 @@ build_project() {
 }
 
 build_local_project() {
-    local project_path="$1"
+    local _project_path="$1"
 
     print_info "Building project locally (no Vercel authentication required)"
 
@@ -494,7 +494,7 @@ build_local_project() {
 }
 
 init_project() {
-    local account_name="$1"
+    local _account_name="$1"
     local project_path="${2:-.}"
     local example="${3:-}"
 

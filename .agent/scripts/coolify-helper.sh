@@ -308,8 +308,8 @@ main() {
     local command="${1:-help}"
     local param2="$2"
     local param3="$3"
-    local param4="$4"
-    local param5="$5"
+    local _param4="$4"
+    local _param5="$5"
 
     local server_name="$param2"
     local command_to_run="$param3"

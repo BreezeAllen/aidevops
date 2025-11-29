@@ -34,7 +34,7 @@ print_warning() {
 
 print_error() {
     local _arg1="$1"
-    echo -e "${RED}[ERROR] $_arg1${NC}"
+    echo -e "${RED}[ERROR] $_arg1${NC}" >&2
     return 0
 }
 
@@ -88,14 +88,12 @@ setup_shell_integration() {
     local updated=0
     
     for config in "${SHELL_CONFIGS[@]}"; do
-        if [[ -f "$config" ]]; then
-            if ! grep -q "mcp-env.sh" "$config" 2>/dev/null; then
-                echo "" >> "$config"
-                echo "# AI DevOps API Keys (single source of truth)" >> "$config"
-                echo "$source_line" >> "$config"
-                print_success "Added mcp-env.sh sourcing to $config"
-                ((updated++))
-            fi
+        if [[ -f "$config" ]] && ! grep -q "mcp-env.sh" "$config" 2>/dev/null; then
+            echo "" >> "$config"
+            echo "# AI DevOps API Keys (single source of truth)" >> "$config"
+            echo "$source_line" >> "$config"
+            print_success "Added mcp-env.sh sourcing to $config"
+            ((updated++))
         fi
     done
     

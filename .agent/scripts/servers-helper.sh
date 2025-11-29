@@ -16,7 +16,7 @@ print_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
     local _arg2="$2"
 print_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 print_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+print_error() { echo -e "${RED}[ERROR]${NC} $1" >&2; }
 
 # Get server configuration (hostname, port, auth method)
 get_server_config() {
