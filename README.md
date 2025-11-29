@@ -4,7 +4,7 @@
 
 *"Deploy my app to production, update the DNS, configure SSL, and set up monitoring"* - **One conversation, complete infrastructure management.**
 
-## 🎯 **Why This Framework?**
+## **Why This Framework?**
 
 **Beyond Single-Repo Limitations:** VS Code and Web UIs work on one repo at a time. CLI AI assistants can manage your entire infrastructure when given the right tools, access, and guidance.
 
@@ -59,26 +59,26 @@
 [![MCP Servers](https://img.shields.io/badge/MCP%20Servers-12-orange.svg)](#-mcp-integrations)
 [![API Integrations](https://img.shields.io/badge/API%20Integrations-30+-blue.svg)](#️-comprehensive-service-coverage)
 
-## 🏆 **Enterprise-Grade Quality & Security**
+## **Enterprise-Grade Quality & Security**
 
 **Multi-Platform Quality Excellence:**
 
-- **🏆 SonarCloud**: A-grade ratings (0 bugs, 0 vulnerabilities)
-- **📊 CodeFactor**: A+ maintainability score
-- **🔧 Qlty**: Automated quality control with actionable quick-fixes
-- **🤖 CodeRabbit**: AI-powered code reviews and security analysis
-- **🛡️ Codacy**: 0 findings across 8 analysis tools (642 security rules)
+- **SonarCloud**: A-grade ratings (0 bugs, 0 vulnerabilities)
+- **CodeFactor**: A+ maintainability score
+- **Qlty**: Automated quality control with actionable quick-fixes
+- **CodeRabbit**: AI-powered code reviews and security analysis
+- **Codacy**: 0 findings across 8 analysis tools (642 security rules)
 
 **Comprehensive DevOps framework with 30+ service integrations, 10 MCP servers, and enterprise-grade quality assurance.**
 
-## ⚠️ **Security Notice**
+## **Security Notice**
 
 **This framework provides AI assistants with powerful infrastructure access. Use responsibly.**
 
 **Capabilities:** Execute commands, access credentials, modify infrastructure, interact with APIs
 **Your responsibility:** Use trusted AI providers, rotate credentials regularly, monitor activity
 
-## 🚀 **Quick Start**
+## **Quick Start**
 
 ```bash
 # 1. Clone and setup
@@ -107,22 +107,22 @@ cd aidevops && ./setup.sh
 - **[Warp AI](https://www.warp.dev/)** (Terminal-integrated)
 - **[OpenAI Codex](https://openai.com/)** (Code-focused model)
 
-## 🎯 **Core Capabilities**
+## **Core Capabilities**
 
-**🤖 AI-First Infrastructure Management:**
+**AI-First Infrastructure Management:**
 
 - SSH server access, remote command execution, API integrations
 - DNS management, application deployment, email monitoring
 - [WordPress](https://wordpress.org/) management, credential security, code auditing
 - Git platform management, domain purchasing, setup automation
 
-**🏗️ Unified Interface:**
+**Unified Interface:**
 
 - Standardized commands across 28+ providers
 - Automated SSH configuration and multi-account support
 - Security-first design with comprehensive logging
 
-**📊 Quality Control & Monitoring:**
+**Quality Control & Monitoring:**
 
 - **Qlty Integration**: Automated quality control with actionable quick-fixes
 - **Multi-Platform Analysis**: SonarCloud, CodeFactor, Codacy, CodeRabbit
@@ -140,9 +140,9 @@ sudo apt-get install sshpass jq curl dnsmasq  # Ubuntu/Debian
 ssh-keygen -t ed25519 -C "your-email@domain.com"
 ```
 
-## 🏗️ **Comprehensive Service Coverage**
+## **Comprehensive Service Coverage**
 
-### **🏗️ Infrastructure & Hosting (7 providers)**
+### **Infrastructure & Hosting (7 providers)**
 
 - **[Hostinger](https://www.hostinger.com/)**: Shared hosting, domains, email
 - **[Hetzner Cloud](https://www.hetzner.com/cloud)**: VPS servers, networking, load balancers
@@ -153,7 +153,7 @@ ssh-keygen -t ed25519 -C "your-email@domain.com"
 - **[AWS](https://aws.amazon.com/)**: Cloud infrastructure support via standard protocols
 - **[DigitalOcean](https://www.digitalocean.com/)**: Cloud infrastructure support via standard protocols
 
-### **🌐 Domain & DNS (5 providers)**
+### **Domain & DNS (5 providers)**
 
 - **[Cloudflare](https://www.cloudflare.com/)**: DNS, CDN, security services
 - **[Spaceship](https://www.spaceship.com/)**: Domain registration and management
@@ -161,7 +161,7 @@ ssh-keygen -t ed25519 -C "your-email@domain.com"
 - **[AWS Route 53](https://aws.amazon.com/route53/)**: AWS DNS management
 - **[Namecheap](https://www.namecheap.com/)**: Domain and DNS services
 
-### **🔧 Development & Git Platforms with CLI Integration (5 platforms)**
+### **Development & Git Platforms with CLI Integration (5 platforms)**
 
 - **[GitHub](https://github.com/)** *Enhanced with CLI*: Repository management, actions, API, GitHub CLI (gh) integration
 - **[GitLab](https://gitlab.com/)** *Enhanced with CLI*: Self-hosted and cloud Git platform with GitLab CLI (glab) integration  
@@ -174,13 +174,13 @@ ssh-keygen -t ed25519 -C "your-email@domain.com"
 - **[LocalWP](https://localwp.com)**: WordPress development environment with MCP database access
 - **[MainWP](https://mainwp.com/)**: WordPress site management dashboard
 
-**🚀 Git CLI Enhancement Features:**
+**Git CLI Enhancement Features:**
 
 - **.agent/scripts/github-cli-helper.sh**: Advanced GitHub repository, issue, PR, and branch management
 - **.agent/scripts/gitlab-cli-helper.sh**: Complete GitLab project, issue, MR, and branch management
 - **.agent/scripts/gitea-cli-helper.sh**: Full Gitea repository, issue, PR, and branch management
 
-### **🔐 Security & Quality (6 platforms)**
+### **Security & Quality (6 platforms)**
 
 - **[Vaultwarden](https://github.com/dani-garcia/vaultwarden)**: Password and secrets management
 - **[SonarCloud](https://sonarcloud.io/)**: Security and quality analysis (A-grade ratings)
@@ -189,27 +189,27 @@ ssh-keygen -t ed25519 -C "your-email@domain.com"
 - **[CodeRabbit](https://coderabbit.ai/)**: AI-powered code reviews
 - **[Snyk](https://snyk.io/)**: Security vulnerability scanning
 
-### **🧠 AI Prompt Optimization (3 tools)**
+### **AI Prompt Optimization (3 tools)**
 
 - **[DSPy](https://dspy.ai/)**: Framework for programming with language models
 - **[DSPyGround](https://dspyground.com/)**: Interactive playground for prompt optimization
 - **[TOON Format](https://github.com/marcusquinn/aidevops/blob/main/.agent/toon-format.md)**: Token-Oriented Object Notation - 20-60% token reduction for LLM prompts
 
-### **📊 Performance & Monitoring (3 integrations)**
+### **Performance & Monitoring (3 integrations)**
 
 - **[Updown.io](https://updown.io/)**: Website uptime and SSL monitoring
 - **[PageSpeed Insights](https://pagespeed.web.dev/)**: Website performance auditing
 - **[Lighthouse](https://developer.chrome.com/docs/lighthouse/)**: Comprehensive web app analysis
 
-### **🤖 AI & Documentation (1 MCP)**
+### **AI & Documentation (1 MCP)**
 
 - **[Context7](https://context7.io/)**: Real-time documentation access for libraries and frameworks
 
-## 🤖 **MCP Integrations**
+## **MCP Integrations**
 
 **13 Model Context Protocol servers for real-time AI assistant integration:**
 
-### **🌐 Web & Browser Automation**
+### **Web & Browser Automation**
 
 - **[Stagehand AI (JavaScript)](https://github.com/browserbase/stagehand)**: AI-powered browser automation with natural language
 - **[Stagehand AI (Python)](https://github.com/browserbase/stagehand-python)**: Python version with Pydantic validation
@@ -217,18 +217,18 @@ ssh-keygen -t ed25519 -C "your-email@domain.com"
 - **[Playwright MCP](https://playwright.dev/)**: Cross-browser testing and automation
 - **[Cloudflare Browser Rendering](https://workers.cloudflare.com/)**: Server-side web scraping
 
-### **🔍 SEO & Research Tools**
+### **SEO & Research Tools**
 
 - **[Ahrefs MCP](https://ahrefs.com/)**: SEO analysis, backlink research, keyword data
 - **[Perplexity MCP](https://www.perplexity.ai/)**: AI-powered web search and research
 - **[Google Search Console MCP](https://search.google.com/search-console)**: Search performance insights
 - **[Grep by Vercel MCP](https://grep.app/)**: Search code snippets across GitHub repositories
 
-### **📊 Performance & Analytics**
+### **Performance & Analytics**
 
 - **[PageSpeed Insights MCP](https://pagespeed.web.dev/)**: Website performance auditing and optimization
 
-### **⚡ Development Tools**
+### **Development Tools**
 
 - **[Next.js DevTools MCP](https://nextjs.org/)**: React/Next.js development assistance
 - **[Context7 MCP](https://context7.io/)**: Real-time documentation access for thousands of libraries
@@ -247,7 +247,7 @@ bash .agent/scripts/setup-mcp-integrations.sh stagehand-both     # Both versions
 bash .agent/scripts/setup-mcp-integrations.sh chrome-devtools
 ```
 
-## 🚀 **Usage Examples**
+## **Usage Examples**
 
 ### **Server Management**
 
@@ -319,11 +319,11 @@ bash .agent/scripts/continue-cli.sh review
 
 **Provider-Specific Guides:** Hostinger, Hetzner, Cloudflare, WordPress, Git platforms, Vercel CLI, Coolify CLI, and more in `.agent/`
 
-## 🏗️ **Architecture**
+## **Architecture**
 
 ```text
 aidevops/
-├── 🔧 setup.sh                       # Main setup script
+├── setup.sh                       # Main setup script
 ├── 📄 AGENTS.md                      # AI agent guidance
 ├── 📁 .agent/scripts/                # Automation & setup scripts
 ├── 📁 .agent/scripts/                     # 28+ service helper scripts
@@ -334,7 +334,7 @@ aidevops/
 └── 📁 templates/                     # Reusable templates and examples
 ```
 
-## 🔧 **Configuration & Setup**
+## **Configuration & Setup**
 
 ```bash
 # 1. Copy and customize configuration templates
@@ -349,7 +349,7 @@ cp configs/hetzner-config.json.txt configs/hetzner-config.json
 bash .agent/scripts/setup-mcp-integrations.sh all
 ```
 
-## 🔐 **Security & Best Practices**
+## **Security & Best Practices**
 
 **Credential Management:**
 
@@ -364,7 +364,7 @@ bash .agent/scripts/setup-mcp-integrations.sh all
 - Automated security monitoring and vulnerability detection
 - Qlty integration for continuous quality improvement
 
-## 🤝 **Contributing & License**
+## **Contributing & License**
 
 **Contributing:**
 
@@ -379,23 +379,23 @@ bash .agent/scripts/setup-mcp-integrations.sh all
 
 ---
 
-## 🎉 **What This Framework Achieves**
+## **What This Framework Achieves**
 
-**🎯 For You:**
+**For You:**
 
 - Unified infrastructure management across 29+ services
 - AI-powered automation with standardized commands
 - Enterprise-grade security and quality assurance
 - Time savings through consistent interfaces
 
-**🤖 For Your AI Assistant:**
+**For Your AI Assistant:**
 
 - Structured access to entire DevOps ecosystem
 - Real-time documentation via Context7 MCP
 - Quality control with Qlty automated fixes
 - Performance monitoring with PageSpeed and Updown.io
 
-**🚀 Get Started:**
+**Get Started:**
 
 1. Clone repository: `git clone https://github.com/marcusquinn/aidevops.git`
 2. Run setup: `./setup.sh`
