@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2025-11-30
+
+### Added
+
+- **Secretlint Integration** - Secret detection tool to prevent committing credentials
+  - New `secretlint-helper.sh` for installation, scanning, and pre-commit hook management
+  - Configuration files `.secretlintrc.json` and `.secretlintignore` for project-specific setup
+  - Comprehensive documentation in `.agent/secretlint.md`
+  - Multi-provider detection: AWS, GCP, GitHub, OpenAI, Anthropic, Slack, npm tokens
+  - Private key detection: RSA, DSA, EC, OpenSSH keys
+  - Database connection string scanning
+  - Docker support for running scans without Node.js
+
+### Changed
+
+- Updated `quality-check.sh` with secretlint integration for comprehensive secret scanning
+- Enhanced `pre-commit-hook.sh` with secretlint pre-commit checks
+- Extended `linter-manager.sh` with secretlint as a supported security linter
+- Updated `.gitignore` with exceptions for secretlint tool files
+
+### Fixed
+
+- Removed duplicate/unreachable return statements in helper scripts
+- Replaced eval with array-based execution for improved security
+- Changed hardcoded /tmp paths to mktemp for safer temporary file handling
+- Added input validation for target patterns in quality scripts
+- Fixed unused variables and awk field references
+- Fixed markdown formatting issues
+
 ## [2.0.0] - 2025-11-29
 
 ### Added

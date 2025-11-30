@@ -79,8 +79,6 @@ check_sonarcloud_status() {
 }
 
 check_return_statements() {
-    local _arg1="$1"
-    local _arg2="$2"
     echo -e "${BLUE}🔄 Checking Return Statements (S7682)...${NC}"
     
     local violations=0
@@ -128,19 +126,22 @@ check_positional_parameters() {
     local violations=0
     
     # Find direct usage of positional parameters (not in local assignments)
-    if grep -n '\$[1-9]' .agent/scripts/*.sh | grep -v 'local.*=.*\$[1-9]' > /tmp/positional_violations.txt; then
-        violations=$(wc -l < /tmp/positional_violations.txt)
+    local tmp_file
+    tmp_file=$(mktemp)
+    
+    if grep -n '\$[1-9]' .agent/scripts/*.sh | grep -v 'local.*=.*\$[1-9]' > "$tmp_file"; then
+        violations=$(wc -l < "$tmp_file")
         
         if [[ $violations -gt 0 ]]; then
             print_warning "Found $violations positional parameter violations:"
-            head -10 /tmp/positional_violations.txt
+            head -10 "$tmp_file"
             if [[ $violations -gt 10 ]]; then
                 echo "... and $((violations - 10)) more"
             fi
         fi
-        
-        rm -f /tmp/positional_violations.txt
     fi
+    
+    rm -f "$tmp_file"
     
     if [[ $violations -le $MAX_POSITIONAL_ISSUES ]]; then
         print_success "Positional parameters: $violations violations (within threshold)"
@@ -161,7 +162,7 @@ check_string_literals() {
         if [[ -f "$file" ]]; then
             # Find strings that appear 3 or more times
             local repeated_strings
-            repeated_strings=$(grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$_arg1 >= 3 {print $_arg1, $_arg2}' | wc -l)
+            repeated_strings=$(grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$1 >= 3 {print $1, $2}' | wc -l)
             
             if [[ $repeated_strings -gt 0 ]]; then
                 ((violations += repeated_strings))
@@ -202,9 +203,70 @@ run_shellcheck() {
     return 0
 }
 
+# Check for secrets in codebase
+check_secrets() {
+    echo -e "${BLUE}🔐 Checking for Exposed Secrets (Secretlint)...${NC}"
+    
+    local secretlint_script=".agent/scripts/secretlint-helper.sh"
+    local violations=0
+    
+    # Check if secretlint is available
+    if command -v secretlint &> /dev/null || [[ -f "node_modules/.bin/secretlint" ]]; then
+        # Run secretlint scan
+        local secretlint_cmd
+        if command -v secretlint &> /dev/null; then
+            secretlint_cmd="secretlint"
+        else
+            secretlint_cmd="./node_modules/.bin/secretlint"
+        fi
+        
+        if [[ -f ".secretlintrc.json" ]]; then
+            # Run scan and capture exit code
+            if $secretlint_cmd "**/*" --format compact 2>/dev/null; then
+                print_success "Secretlint: No secrets detected"
+            else
+                violations=1
+                print_error "Secretlint: Potential secrets detected!"
+                print_info "Run: bash $secretlint_script scan (for detailed results)"
+            fi
+        else
+            print_warning "Secretlint: Configuration not found"
+            print_info "Run: bash $secretlint_script init"
+        fi
+    elif command -v docker &> /dev/null; then
+        print_info "Secretlint: Using Docker for scan..."
+        if docker run -v "$(pwd)":"$(pwd)" -w "$(pwd)" --rm secretlint/secretlint secretlint "**/*" --format compact 2>/dev/null; then
+            print_success "Secretlint: No secrets detected"
+        else
+            violations=1
+            print_error "Secretlint: Potential secrets detected!"
+        fi
+    else
+        print_warning "Secretlint: Not installed (install with: npm install secretlint)"
+        print_info "Run: bash $secretlint_script install"
+    fi
+    
+    return $violations
+}
+
 # Check AI-Powered Quality CLIs integration
 check_quality_clis() {
     print_info "🤖 Checking AI-Powered Quality CLIs Integration..."
+
+    # Secretlint
+    local secretlint_script=".agent/scripts/secretlint-helper.sh"
+    if [[ -f "$secretlint_script" ]]; then
+        if command -v secretlint &> /dev/null || [[ -f "node_modules/.bin/secretlint" ]]; then
+            print_success "Secretlint: Integration ready"
+            print_info "Run: bash $secretlint_script scan (for secret detection)"
+        else
+            print_info "Secretlint: Available for setup"
+            print_info "Run: bash $secretlint_script install"
+        fi
+    else
+        print_warning "Secretlint helper script not found"
+    fi
+    echo ""
 
     # CodeRabbit CLI
     local coderabbit_script=".agent/scripts/coderabbit-cli.sh"
@@ -271,6 +333,9 @@ main() {
     
     run_shellcheck || exit_code=1
     echo ""
+    
+    check_secrets || exit_code=1
+    echo ""
 
     check_quality_clis
 
@@ -288,7 +353,6 @@ main() {
     fi
     
     return $exit_code
-    return 0
 }
 
 main "$@"

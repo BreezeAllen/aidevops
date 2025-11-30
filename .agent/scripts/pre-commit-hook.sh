@@ -43,8 +43,6 @@ get_modified_shell_files() {
 }
 
 validate_return_statements() {
-    local _arg1="$1"
-    local _arg2="$2"
     local violations=0
     
     print_info "Validating return statements..."
@@ -81,7 +79,6 @@ validate_positional_parameters() {
     done
     
     return $violations
-    return 0
 }
 
 validate_string_literals() {
@@ -93,18 +90,17 @@ validate_string_literals() {
         if [[ -f "$file" ]]; then
             # Check for repeated string literals
             local repeated
-            repeated=$(grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$_arg1 >= 3' | wc -l || echo "0")
+            repeated=$(grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$1 >= 3' | wc -l || echo "0")
             
             if [[ $repeated -gt 0 ]]; then
                 print_warning "Repeated string literals in $file (consider using constants)"
-                grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$_arg1 >= 3 {print "  " $_arg1 "x: " $_arg2}' | head -3
+                grep -o '"[^"]*"' "$file" | sort | uniq -c | awk '$1 >= 3 {print "  " $1 "x: " $2}' | head -3
                 ((violations++))
             fi
         fi
     done
     
     return $violations
-    return 0
 }
 
 run_shellcheck() {
@@ -120,7 +116,53 @@ run_shellcheck() {
     done
     
     return $violations
-    return 0
+}
+
+check_secrets() {
+    local violations=0
+    
+    print_info "Checking for exposed secrets (Secretlint)..."
+    
+    # Get staged files
+    local staged_files
+    staged_files=$(git diff --cached --name-only --diff-filter=ACMR | tr '\n' ' ')
+    
+    if [[ -z "$staged_files" ]]; then
+        print_info "No files to check for secrets"
+        return 0
+    fi
+    
+    # Check if secretlint is available
+    if command -v secretlint &> /dev/null; then
+        if echo "$staged_files" | xargs secretlint --format compact 2>/dev/null; then
+            print_success "No secrets detected in staged files"
+        else
+            print_error "Potential secrets detected in staged files!"
+            print_info "Review the findings and either:"
+            print_info "  1. Remove the secrets from your code"
+            print_info "  2. Add to .secretlintignore if false positive"
+            print_info "  3. Use // secretlint-disable-line comment"
+            ((violations++))
+        fi
+    elif [[ -f "node_modules/.bin/secretlint" ]]; then
+        if echo "$staged_files" | xargs ./node_modules/.bin/secretlint --format compact 2>/dev/null; then
+            print_success "No secrets detected in staged files"
+        else
+            print_error "Potential secrets detected in staged files!"
+            ((violations++))
+        fi
+    elif command -v npx &> /dev/null && [[ -f ".secretlintrc.json" ]]; then
+        if echo "$staged_files" | xargs npx secretlint --format compact 2>/dev/null; then
+            print_success "No secrets detected in staged files"
+        else
+            print_error "Potential secrets detected in staged files!"
+            ((violations++))
+        fi
+    else
+        print_warning "Secretlint not available (install: npm install secretlint --save-dev)"
+    fi
+    
+    return $violations
 }
 
 check_quality_standards() {
@@ -177,6 +219,9 @@ main() {
     run_shellcheck "${modified_files[@]}" || ((total_violations += $?))
     echo ""
     
+    check_secrets || ((total_violations += $?))
+    echo ""
+    
     check_quality_standards
     echo ""
 
@@ -209,9 +254,6 @@ main() {
 
         exit 1
     fi
-
-    # Explicit return for successful completion
-    return 0
 }
 
 main "$@"

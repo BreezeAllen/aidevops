@@ -44,7 +44,7 @@
 .agent/scripts/setup-local-api-keys.sh set [service] [key]
 ```
 
-**Services**: Hostinger, Hetzner, Cloudflare, GitHub/GitLab/Gitea CLIs, MainWP, Vaultwarden, SonarCloud, Codacy, CodeRabbit, Snyk, Crawl4AI, 9 MCP integrations
+**Services**: Hostinger, Hetzner, Cloudflare, GitHub/GitLab/Gitea CLIs, MainWP, Vaultwarden, SonarCloud, Codacy, CodeRabbit, Snyk, Secretlint, Crawl4AI, 9 MCP integrations
 
 <!-- AI-CONTEXT-END -->
 
@@ -903,7 +903,7 @@ aidevops/
 
 - CodeRabbit, CodeFactor, Codacy, SonarCloud, Snyk
 
-### **Security Scanning (1 service)**
+### **Security Scanning (2 services)**
 
 - **Snyk** ✅ **Developer Security Platform**: Comprehensive vulnerability scanning
   - **Open Source (SCA)**: Dependency vulnerability scanning for 40+ languages
@@ -912,6 +912,14 @@ aidevops/
   - **IaC**: Infrastructure as Code misconfiguration detection (Terraform, K8s, CloudFormation)
   - **MCP Integration**: Official Snyk MCP server for AI assistant integration
   - **CI/CD Ready**: Native GitHub Actions, GitLab CI, and pipeline integrations
+
+- **Secretlint** ✅ **Secret Detection Tool**: Pluggable linting to prevent committing credentials
+  - **Multi-Provider Detection**: AWS, GCP, GitHub, OpenAI, Anthropic, Slack, npm tokens
+  - **Private Key Detection**: RSA, DSA, EC, OpenSSH private keys
+  - **Database Strings**: Connection strings with embedded credentials
+  - **Pre-commit Hooks**: Prevent secrets from being committed (Husky, lint-staged, native git)
+  - **Docker Support**: Run scans without Node.js installation
+  - **CI/CD Ready**: GitHub Actions, GitLab CI, SARIF output for security dashboards
 
 ### **Version Control & Git Platforms (4 services)**
 

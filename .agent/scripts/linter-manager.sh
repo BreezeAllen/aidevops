@@ -19,32 +19,32 @@ readonly NC='\033[0m'
 # Common constants
 readonly ERROR_UNKNOWN_COMMAND="Unknown command:"
 print_success() {
-    local _arg1="$1"
-    echo -e "${GREEN}✅ $_arg1${NC}"
+    local message="$1"
+    echo -e "${GREEN}✅ $message${NC}"
     return 0
 }
 
 print_error() {
-    local _arg1="$1"
-    echo -e "${RED}❌ $_arg1${NC}" >&2
+    local message="$1"
+    echo -e "${RED}❌ $message${NC}" >&2
     return 0
 }
 
 print_warning() {
-    local _arg1="$1"
-    echo -e "${YELLOW}⚠️  $_arg1${NC}"
+    local message="$1"
+    echo -e "${YELLOW}⚠️  $message${NC}"
     return 0
 }
 
 print_info() {
-    local _arg1="$1"
-    echo -e "${BLUE}ℹ️  $_arg1${NC}"
+    local message="$1"
+    echo -e "${BLUE}ℹ️  $message${NC}"
     return 0
 }
 
 print_header() {
-    local _arg1="$1"
-    echo -e "${PURPLE}🔧 $_arg1${NC}"
+    local message="$1"
+    echo -e "${PURPLE}🔧 $message${NC}"
     echo "=========================================="
     return 0
 }
@@ -204,7 +204,6 @@ install_python_linters() {
     
     print_info "Python linters: $success/$total installed successfully"
     return $((total - success))
-    return 0
 }
 
 # Install JavaScript/TypeScript linters (CodeFactor: Oxlint, ESLint)
@@ -236,7 +235,6 @@ install_javascript_linters() {
 
     print_info "JavaScript/TypeScript linters: $success/$total installed successfully"
     return $((total - success))
-    return 0
 }
 
 # Install CSS linters (CodeFactor: Stylelint)
@@ -258,7 +256,6 @@ install_css_linters() {
 
     print_info "CSS linters: $success/$total installed successfully"
     return $((total - success))
-    return 0
 }
 
 # Install Shell linters (CodeFactor: ShellCheck)
@@ -286,7 +283,6 @@ install_shell_linters() {
 
     print_info "Shell linters: $success/$total installed successfully"
     return $((total - success))
-    return 0
 }
 
 # Install Docker linters (CodeFactor: Hadolint)
@@ -311,7 +307,6 @@ install_docker_linters() {
 
     print_info "Docker linters: $success/$total installed successfully"
     return $((total - success))
-    return 0
 }
 
 # Install YAML linters (CodeFactor: Yamllint)
@@ -333,10 +328,9 @@ install_yaml_linters() {
 
     print_info "YAML linters: $success/$total installed successfully"
     return $((total - success))
-    return 0
 }
 
-# Install Security linters (CodeFactor: Trivy)
+# Install Security linters (CodeFactor: Trivy, Secretlint)
 install_security_linters() {
     print_header "Installing Security Linters (CodeFactor-inspired)"
 
@@ -356,9 +350,21 @@ install_security_linters() {
     fi
     ((total++))
 
+    # Secretlint (secret detection)
+    print_info "Installing Secretlint..."
+    if command -v secretlint &>/dev/null; then
+        print_success "Secretlint already installed"
+        ((success++))
+    elif npm install -g secretlint @secretlint/secretlint-rule-preset-recommend &>/dev/null; then
+        print_success "Secretlint installed via npm"
+        ((success++))
+    else
+        print_error "Failed to install Secretlint"
+    fi
+    ((total++))
+
     print_info "Security linters: $success/$total installed successfully"
     return $((total - success))
-    return 0
 }
 
 # Install linters for detected languages
@@ -466,7 +472,6 @@ install_all_linters() {
     fi
 
     return $total_failures
-    return 0
 }
 
 # Show help
@@ -489,7 +494,7 @@ show_help() {
     echo "  shell                - ShellCheck"
     echo "  docker               - Hadolint"
     echo "  yaml                 - yamllint"
-    echo "  security             - Trivy"
+    echo "  security             - Trivy, Secretlint"
     echo ""
     echo "Examples:"
     echo "  $0 detect"

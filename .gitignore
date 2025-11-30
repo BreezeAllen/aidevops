@@ -33,6 +33,12 @@ authorized_keys
 *api_key*
 *apikey*
 
+# Exceptions for secretlint tool (security linter, not actual secrets)
+!.secretlintrc.json
+!.secretlintignore
+!.agent/scripts/secretlint-helper.sh
+!.agent/secretlint.md
+
 # Environment files
 .env*
 *.env
