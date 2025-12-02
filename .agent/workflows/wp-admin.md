@@ -1,8 +1,5 @@
-# WordPress Admin Subagent
-
 ---
-
-description: "[DEV-2] WordPress admin - content, customization, maintenance. WP-CLI + MainWP for site management"
+description: WordPress admin - content management, plugins, maintenance, WP-CLI and MainWP integration
 mode: subagent
 temperature: 0.2
 tools:
@@ -14,6 +11,8 @@ tools:
   wordpress-mcp_*: true
   context7_*: true
 ---
+
+# WordPress Admin Subagent
 
 <!-- AI-CONTEXT-START -->
 ## Quick Reference

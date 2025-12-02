@@ -1,17 +1,14 @@
-# LocalWP Database Access Subagent
-
 ---
-
-description: "[DEV-3] LocalWP database access - read-only SQL, schema inspection. Requires LocalWP running. Called from @wp-dev"
+description: LocalWP database access - read-only SQL queries, schema inspection via MCP. Requires LocalWP running
 mode: subagent
 temperature: 0.1
 tools:
-  write: false
-  edit: false
   bash: true
   read: true
   localwp_*: true
 ---
+
+# LocalWP Database Access Subagent
 
 <!-- AI-CONTEXT-START -->
 

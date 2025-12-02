@@ -1,8 +1,5 @@
-# WordPress Development & Debugging Subagent
-
 ---
-
-description: "[DEV-1] WordPress development & debugging - theme/plugin dev, testing, error diagnosis. Uses Context7 for latest docs"
+description: WordPress development & debugging - theme/plugin dev, testing, MCP Adapter, error diagnosis
 mode: subagent
 temperature: 0.2
 tools:
@@ -17,6 +14,8 @@ tools:
   wordpress-mcp_*: true
   context7_*: true
 ---
+
+# WordPress Development & Debugging Subagent
 
 <!-- AI-CONTEXT-START -->
 ## Quick Reference

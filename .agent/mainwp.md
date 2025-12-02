@@ -1,6 +1,14 @@
 ---
 description: MainWP WordPress fleet management - bulk updates, backups, security scans, and monitoring across multiple WordPress sites via REST API
-tools: ["bash", "read", "write", "edit", "glob", "grep"]
+mode: subagent
+temperature: 0.1
+tools:
+  bash: true
+  read: true
+  write: true
+  edit: true
+  glob: true
+  grep: true
 ---
 
 # MainWP WordPress Management Guide
