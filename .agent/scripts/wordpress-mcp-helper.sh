@@ -457,7 +457,7 @@ main() {
     local arg2="$3"
     local arg3="$4"
     local arg4="$5"
-    local arg5="$6"
+    # arg5 removed - unused
     
     check_dependencies || exit 1
     load_mcp_env

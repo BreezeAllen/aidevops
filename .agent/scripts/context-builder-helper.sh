@@ -116,6 +116,7 @@ generate_output_name() {
     else
         echo "${DEFAULT_OUTPUT_DIR}/${base_name}-${timestamp}.${style}"
     fi
+    return 0
 }
 
 # =============================================================================

@@ -60,22 +60,31 @@ print_header() {
     echo -e "${BLUE}  AI DevOps - OpenCode Agent Setup${NC}"
     echo -e "${BLUE}========================================${NC}"
     echo ""
+    return 0
 }
 
 print_success() {
-    echo -e "${GREEN}✓${NC} $1"
+    local msg="$1"
+    echo -e "${GREEN}✓${NC} $msg"
+    return 0
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠${NC} $1"
+    local msg="$1"
+    echo -e "${YELLOW}⚠${NC} $msg"
+    return 0
 }
 
 print_error() {
-    echo -e "${RED}✗${NC} $1"
+    local msg="$1"
+    echo -e "${RED}✗${NC} $msg"
+    return 0
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ${NC} $1"
+    local msg="$1"
+    echo -e "${BLUE}ℹ${NC} $msg"
+    return 0
 }
 
 check_prerequisites() {
