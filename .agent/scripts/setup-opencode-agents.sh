@@ -39,6 +39,10 @@ readonly AGENT_NAMES=(
     "hostinger"
     "hetzner"
     "wordpress"
+    "wp-dev"
+    "wp-admin"
+    "localwp"
+    "mainwp"
     "seo"
     "code-quality"
     "browser-automation"
@@ -48,6 +52,7 @@ readonly AGENT_NAMES=(
     "crawl4ai-usage"
     "dns-providers"
     "agent-review"
+    "context-builder"
 )
 
 print_header() {
@@ -272,11 +277,11 @@ AGENT_EOF
     print_success "Created hetzner.md (subagent)"
 
     # ==========================================================================
-    # SUBAGENT: wordpress
+    # SUBAGENT: wordpress (orchestrator for wp-dev and wp-admin)
     # ==========================================================================
     cat > "$OPENCODE_AGENT_DIR/wordpress.md" << 'AGENT_EOF'
 ---
-description: "[DEV-1] WordPress/MainWP - local dev, multi-site management. Parallel with git-platforms, crawl4ai. Run AFTER infrastructure"
+description: "[DEV-1] WordPress orchestrator - routes to @wp-dev (development) or @wp-admin (content/maintenance). Parallel with git-platforms, crawl4ai"
 mode: subagent
 temperature: 0.2
 tools:
@@ -284,31 +289,300 @@ tools:
   edit: true
   bash: true
   read: true
-  localwp_*: true
+  task: true
   context7_*: true
 ---
 
-# WordPress Operations Agent
+# WordPress Operations Agent (Orchestrator)
 
-Specialized agent for WordPress development and management.
+Routes WordPress tasks to specialized subagents.
+
+## Subagent Routing
+
+| Task Type | Subagent | Description |
+|-----------|----------|-------------|
+| Development | `@wp-dev` | Theme/plugin dev, debugging, testing, MCP Adapter |
+| Content/Admin | `@wp-admin` | Posts, pages, plugins, backups, WP-CLI |
+| LocalWP DB | `@localwp` | Direct database queries via MCP |
+| Fleet Mgmt | `@mainwp` | Multi-site updates, security, backups |
 
 ## Reference Documentation
 
-- `~/git/aidevops/.agent/localwp-mcp.md` - LocalWP MCP integration
-- `~/git/aidevops/.agent/mainwp.md` - MainWP multi-site management
+- `~/git/aidevops/.agent/workflows/wp-dev.md` - Development & debugging
+- `~/git/aidevops/.agent/workflows/wp-admin.md` - Content & maintenance
+- `~/git/aidevops/.agent/localwp.md` - LocalWP database access
+- `~/git/aidevops/.agent/mainwp.md` - MainWP fleet management
+- `~/git/aidevops/.agent/wp-preferred.md` - Curated plugin list
+
+## Quick Decision
+
+- **Building themes/plugins?** → `@wp-dev`
+- **Managing content/updates?** → `@wp-admin`
+- **Database queries?** → `@localwp`
+- **Multiple sites?** → `@mainwp`
+
+## Working Directory
+
+Use `~/.agent/work/wordpress/` for all WordPress work.
+AGENT_EOF
+    print_success "Created wordpress.md (orchestrator subagent)"
+
+    # ==========================================================================
+    # SUBAGENT: wp-dev (WordPress development & debugging)
+    # ==========================================================================
+    cat > "$OPENCODE_AGENT_DIR/wp-dev.md" << 'AGENT_EOF'
+---
+description: "[DEV-1a] WordPress development - MCP Adapter, themes, plugins, debugging, testing. Called from @wordpress"
+mode: subagent
+temperature: 0.2
+tools:
+  write: true
+  edit: true
+  bash: true
+  read: true
+  glob: true
+  grep: true
+  context7_*: true
+---
+
+# WordPress Development Agent
+
+Specialized agent for WordPress theme/plugin development, debugging, and testing.
+
+## Reference Documentation
+
+Read `~/git/aidevops/.agent/workflows/wp-dev.md` for complete guidance.
+
+## WordPress MCP Adapter
+
+Official WordPress MCP integration supporting STDIO and HTTP transports.
+
+### STDIO (Local/SSH)
+```bash
+# Test connection
+~/git/aidevops/.agent/scripts/wordpress-mcp-helper.sh test-stdio SITE_NAME
+
+# Generate MCP config
+~/git/aidevops/.agent/scripts/wordpress-mcp-helper.sh config-stdio SITE_NAME admin
+```
+
+### HTTP (Remote sites without SSH)
+```bash
+~/git/aidevops/.agent/scripts/wordpress-mcp-helper.sh config-http SITE_NAME URL USER PASS
+```
+
+## Key Commands
+
+```bash
+# LocalWP sites
+~/Local Sites/SITE_NAME/app/public
+
+# WP-CLI via MCP
+echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | wp --path=/path mcp-adapter serve --user=admin
+
+# PHPUnit tests
+wp scaffold plugin-tests PLUGIN_SLUG
+```
+
+## Related Subagents
+
+- `@localwp` - Direct database access
+- `@context7` - Library documentation
+- `@code-quality` - Code quality checks
+AGENT_EOF
+    print_success "Created wp-dev.md (development subagent)"
+
+    # ==========================================================================
+    # SUBAGENT: wp-admin (WordPress content & maintenance)
+    # ==========================================================================
+    cat > "$OPENCODE_AGENT_DIR/wp-admin.md" << 'AGENT_EOF'
+---
+description: "[DEV-1b] WordPress admin - content, plugins, backups, WP-CLI. Called from @wordpress"
+mode: subagent
+temperature: 0.2
+tools:
+  write: true
+  edit: true
+  bash: true
+  read: true
+---
+
+# WordPress Admin Agent
+
+Specialized agent for WordPress content management, maintenance, and WP-CLI operations.
+
+## Reference Documentation
+
+Read `~/git/aidevops/.agent/workflows/wp-admin.md` for complete guidance.
+
+## Content Management
+
+```bash
+# Create post
+wp post create --post_type=post --post_title="Title" --post_status=draft
+
+# List pages
+wp post list --post_type=page --format=table
+
+# Manage media
+wp media import /path/to/image.jpg
+```
+
+## Plugin/Theme Management
+
+```bash
+# Install and activate
+wp plugin install SLUG --activate
+
+# Bulk install from wp-preferred categories
+wp plugin install advanced-custom-fields classic-editor --activate
+
+# Update all
+wp plugin update --all
+```
+
+## Backups
+
+```bash
+# Database export
+wp db export backup.sql
+
+# Full export with Updraft
+wp updraftplus backup
+```
+
+## Hosting-Specific Notes
+
+| Host | SSH Access | WP-CLI | Notes |
+|------|------------|--------|-------|
+| LocalWP | N/A | Direct | `~/Local Sites/` |
+| Hostinger | sshpass | Available | Password in `~/.ssh/hostinger_password` |
+| Closte | sshpass | Available | Password in `~/.ssh/closte_password` |
+| Hetzner | SSH key | Install manually | Root access |
+| Cloudron | N/A | In-app terminal | Use HTTP transport |
+
+## Related Subagents
+
+- `@mainwp` - Fleet management for multiple sites
+- `@wp-preferred` - Plugin recommendations
+AGENT_EOF
+    print_success "Created wp-admin.md (admin subagent)"
+
+    # ==========================================================================
+    # SUBAGENT: localwp (LocalWP database access)
+    # ==========================================================================
+    cat > "$OPENCODE_AGENT_DIR/localwp.md" << 'AGENT_EOF'
+---
+description: "[DEV-1c] LocalWP database - MySQL queries via MCP. Called from @wp-dev"
+mode: subagent
+temperature: 0.1
+tools:
+  read: true
+  bash: true
+  localwp_*: true
+---
+
+# LocalWP Database Agent
+
+Direct database access to LocalWP sites via MCP.
+
+## Reference Documentation
+
+Read `~/git/aidevops/.agent/localwp.md` for complete guidance.
 
 ## Available MCP Tools
-
-### LocalWP MCP (localwp_*)
 
 - `localwp_mysql_query` - Execute read-only SQL queries
 - `localwp_mysql_schema` - Inspect database schema and tables
 
-## Working Directory
+## Common Queries
 
-Use `~/.agent/work/wordpress/` for theme customizations, plugin development, content drafts.
+```sql
+-- Get recent posts
+SELECT ID, post_title, post_status FROM wp_posts 
+WHERE post_type='post' ORDER BY post_date DESC LIMIT 10;
+
+-- Check options
+SELECT option_name, option_value FROM wp_options 
+WHERE option_name IN ('siteurl', 'blogname', 'active_plugins');
+
+-- User list
+SELECT ID, user_login, user_email FROM wp_users;
+```
+
+## Site Locations
+
+Default: `~/Local Sites/SITE_NAME/app/public`
+
+## Multisite Queries
+
+```sql
+-- List network sites
+SELECT blog_id, domain, path FROM wp_blogs;
+
+-- Query specific site (prefix = wp_2_)
+SELECT * FROM wp_2_posts WHERE post_status='publish';
+```
 AGENT_EOF
-    print_success "Created wordpress.md (subagent)"
+    print_success "Created localwp.md (database subagent)"
+
+    # ==========================================================================
+    # SUBAGENT: mainwp (MainWP fleet management)
+    # ==========================================================================
+    cat > "$OPENCODE_AGENT_DIR/mainwp.md" << 'AGENT_EOF'
+---
+description: "[DEV-1d] MainWP fleet - bulk updates, backups, security scans. Called from @wp-admin"
+mode: subagent
+temperature: 0.1
+tools:
+  bash: true
+  read: true
+---
+
+# MainWP Fleet Management Agent
+
+Manage multiple WordPress sites from a central dashboard.
+
+## Reference Documentation
+
+Read `~/git/aidevops/.agent/mainwp.md` for complete guidance.
+
+## Helper Script
+
+```bash
+~/git/aidevops/.agent/scripts/mainwp-helper.sh [command] [instance] [site-id]
+```
+
+## Key Commands
+
+```bash
+# List instances
+mainwp-helper.sh instances
+
+# List managed sites
+mainwp-helper.sh sites production
+
+# Bulk updates
+mainwp-helper.sh bulk-update-plugins production 123 124 125
+
+# Security scan
+mainwp-helper.sh security-scan production 123
+
+# Create backup
+mainwp-helper.sh backup production 123 full
+```
+
+## Configuration
+
+Config: `configs/mainwp-config.json`
+Auth: consumer_key + consumer_secret via REST API
+
+## Related Subagents
+
+- `@wp-admin` - Single site management
+- `@wp-preferred` - Plugin recommendations
+AGENT_EOF
+    print_success "Created mainwp.md (fleet management subagent)"
 
     # ==========================================================================
     # SUBAGENT: seo
@@ -760,6 +1034,75 @@ Session → @agent-review → Improvements → PR to aidevops → Better Agents 
 AGENT_EOF
     print_success "Created agent-review.md (meta-agent for improvement)"
 
+    # ==========================================================================
+    # SUBAGENT: context-builder
+    # ==========================================================================
+    cat > "$OPENCODE_AGENT_DIR/context-builder.md" << 'AGENT_EOF'
+---
+description: "[UTILITY-1] Context Builder - token-efficient AI context generation (~80% reduction). Use BEFORE complex coding tasks"
+mode: subagent
+temperature: 0.1
+tools:
+  bash: true
+  read: true
+  write: true
+  glob: true
+  repomix_*: true
+---
+
+# Context Builder Agent
+
+Specialized agent for generating token-efficient context for AI coding assistants.
+
+## Purpose
+
+Generate optimized repository context using Repomix with Tree-sitter compression.
+Achieves ~80% token reduction while preserving code structure understanding.
+
+## Reference Documentation
+
+Read `~/git/aidevops/.agent/context-builder.md` for complete operational guidance.
+
+## Available Commands
+
+```bash
+# Helper script
+~/git/aidevops/.agent/scripts/context-builder-helper.sh
+
+# Compress mode (recommended) - ~80% token reduction
+context-builder-helper.sh compress [path] [style]
+
+# Full pack with smart defaults
+context-builder-helper.sh pack [path] [xml|markdown|json]
+
+# Quick mode - auto-copies to clipboard
+context-builder-helper.sh quick [path] [pattern]
+
+# Analyze token usage per file
+context-builder-helper.sh analyze [path] [threshold]
+
+# Pack remote GitHub repo
+context-builder-helper.sh remote user/repo [branch]
+
+# Compare full vs compressed
+context-builder-helper.sh compare [path]
+```
+
+## When to Use
+
+| Scenario | Command | Token Impact |
+|----------|---------|--------------|
+| Architecture review | `compress` | ~80% reduction |
+| Full implementation details | `pack` | Full tokens |
+| Quick file subset | `quick . "**/*.ts"` | Minimal |
+| External repo analysis | `remote user/repo` | Compressed |
+
+## Output Location
+
+All context files saved to: `~/.agent/work/context/`
+AGENT_EOF
+    print_success "Created context-builder.md (utility subagent)"
+
     return 0
 }
 
@@ -936,6 +1279,18 @@ JSON_EOF
         "*": "deny"
       }
     }
+  },
+  "context-builder": {
+    "description": "Context Builder - token-efficient AI context generation (~80% reduction via Tree-sitter compression)",
+    "mode": "subagent",
+    "temperature": 0.1,
+    "tools": {
+      "bash": true,
+      "read": true,
+      "write": true,
+      "glob": true,
+      "repomix_*": true
+    }
   }
 }
 AGENT_CONFIG_REFERENCE
@@ -1042,9 +1397,11 @@ install_agents() {
     echo ""
     print_info "Installed agents:"
     echo "  - aidevops (primary) - Full framework access"
-    echo "  - hostinger, hetzner, wordpress, seo (service subagents)"
+    echo "  - hostinger, hetzner, seo (infrastructure subagents)"
+    echo "  - wordpress (orchestrator) → wp-dev, wp-admin, localwp, mainwp"
     echo "  - code-quality (with learning loop for framework improvement)"
     echo "  - browser-automation, git-platforms, dns-providers"
+    echo "  - context-builder (token-efficient context generation)"
     echo "  - agent-review (meta-agent for continuous improvement)"
     echo ""
     print_info "Next steps:"
@@ -1055,6 +1412,7 @@ install_agents() {
     print_info "Usage:"
     echo "  - Use Tab to switch between primary agents"
     echo "  - Use @agent-name to invoke subagents"
+    echo "  - Use @context-builder before complex coding tasks for optimized context"
     echo "  - Use @agent-review at end of sessions to capture improvements"
     echo "  - Use @code-quality to fix issues AND improve framework guidance"
     
@@ -1081,12 +1439,19 @@ The script creates specialized AI agents for:
   SERVICE SUBAGENTS:
     hostinger       Hostinger hosting operations
     hetzner         Hetzner Cloud infrastructure (multi-account)
-    wordpress       WordPress/MainWP + LocalWP MCP
+    wordpress       WordPress orchestrator (routes to specialized agents)
+      wp-dev        WordPress development, MCP Adapter, debugging
+      wp-admin      WordPress content, plugins, WP-CLI
+      localwp       LocalWP database access via MCP
+      mainwp        MainWP fleet management
     seo             Google Search Console + Ahrefs
     browser-automation  Chrome DevTools + Playwright
     git-platforms   GitHub/GitLab/Gitea CLIs
     dns-providers   Cloudflare, Namecheap, Route 53
     crawl4ai-usage  Web crawling and extraction
+
+  UTILITY SUBAGENTS:
+    context-builder Token-efficient context generation (~80% reduction)
 
   META AGENTS:
     code-quality    Quality scanning + learning loop + PR creation

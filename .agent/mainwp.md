@@ -1,3 +1,8 @@
+---
+description: MainWP WordPress fleet management - bulk updates, backups, security scans, and monitoring across multiple WordPress sites via REST API
+tools: ["bash", "read", "write", "edit", "glob", "grep"]
+---
+
 # MainWP WordPress Management Guide
 
 <!-- AI-CONTEXT-START -->
@@ -12,6 +17,7 @@
 - **API test**: `curl -I https://mainwp.yourdomain.com/wp-json/mainwp/v1/`
 - **Bulk ops**: `bulk-update-wp`, `bulk-update-plugins` for multiple site IDs
 - **Backup types**: full, db, files
+- **Related**: `@wp-admin` (calls this for fleet management), `@wp-preferred` (plugin recommendations)
 <!-- AI-CONTEXT-END -->
 
 MainWP is a powerful self-hosted WordPress management platform that allows you to manage multiple WordPress sites from a single dashboard with comprehensive API access.

@@ -40,11 +40,19 @@ These workflows provide **universal best practices** that apply to:
 |------|-------------|
 | **multi-repo-workspace.md** | Working safely across multiple repositories |
 
-### Platform-Specific
+### WordPress Development (Subagents)
 
-| File | Description |
-|------|-------------|
-| **wordpress-local-testing.md** | WordPress Playground, LocalWP, wp-env testing |
+| File | Description | Subagent |
+|------|-------------|----------|
+| **wp-dev.md** | WordPress MCP Adapter, theme/plugin dev, debugging, testing | `@wp-dev` |
+| **wp-admin.md** | Content management, plugins, backups, WP-CLI | `@wp-admin` |
+
+These are OpenCode subagents - invoke with `@wp-dev` or `@wp-admin`.
+
+Related files in `.agent/`:
+- `localwp.md` - LocalWP database access via MCP (`@localwp`)
+- `mainwp.md` - MainWP fleet management (`@mainwp`)
+- `wp-preferred.md` - Curated plugin list with 127+ plugins
 
 ## Quick Reference
 
@@ -66,8 +74,11 @@ These workflows provide **universal best practices** that apply to:
 
 ### WordPress Development
 
-1. Use **wordpress-local-testing.md** for environment setup
-2. Follow platform-specific guidance from `.agent/*.md` files
+1. Use `@wp-dev` for development, debugging, and testing
+2. Use `@wp-admin` for content management and maintenance
+3. Use `@localwp` for direct database queries
+4. Use `@mainwp` for managing multiple sites
+5. Reference `wp-preferred.md` for plugin recommendations
 
 ## Usage
 

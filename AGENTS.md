@@ -891,9 +891,20 @@ aidevops/
   - **Framework Support**: Next.js, React, Vue, Svelte, and static sites
   - **Performance Monitoring**: Built-in analytics and speed insights
 
-### **Content Management (1 service)**
+### **Content Management (1 service + WordPress MCP Adapter)**
 
-- MainWP
+- **MainWP** - Self-hosted WordPress fleet management
+- **WordPress MCP Adapter** ✅ **Official WordPress MCP Integration**:
+  - **Abilities API**: Exposes WordPress functions as MCP tools, resources, and prompts
+  - **STDIO Transport**: Local development via WP-CLI (fastest)
+  - **HTTP Transport**: Remote sites via `@automattic/mcp-wordpress-remote`
+  - **SSH Transport**: Remote sites with SSH access (sshpass for Hostinger/Closte)
+  - **Multisite Support**: Full WordPress Multisite network support
+  - **Subagents**: `@wp-dev` (development), `@wp-admin` (content), `@localwp` (database), `@mainwp` (fleet)
+  - **Helper Script**: `.agent/scripts/wordpress-mcp-helper.sh`
+  - **Config Template**: `configs/wordpress-sites-config.json.txt`
+  - **MCP Template**: `configs/mcp-templates/wordpress-mcp-adapter.json`
+  - **Curated Plugins**: `.agent/wp-preferred.md` (127+ plugins in 19 categories)
 
 ### **Security & Secrets (1 service)**
 

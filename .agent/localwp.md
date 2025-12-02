@@ -1,4 +1,16 @@
-# LocalWP MCP Integration Guide
+# LocalWP Database Access Subagent
+
+---
+description: "[DEV-3] LocalWP database access - read-only SQL, schema inspection. Requires LocalWP running. Called from @wp-dev"
+mode: subagent
+temperature: 0.1
+tools:
+  write: false
+  edit: false
+  bash: true
+  read: true
+  localwp_*: true
+---
 
 <!-- AI-CONTEXT-START -->
 
@@ -24,26 +36,28 @@ DESCRIBE wp_postmeta;
 
 **Requires**: Local by Flywheel running with active site
 **Security**: Read-only only, local development environments only
+
+**Typically invoked from**: `@wp-dev` for database inspection during debugging
 <!-- AI-CONTEXT-END -->
 
-This guide explains how to set up and use the LocalWP MCP server for AI-powered WordPress database access.
+This subagent provides AI assistants with direct, read-only access to Local by Flywheel WordPress databases.
 
-## 🎯 **What is LocalWP MCP?**
+## What is LocalWP MCP?
 
 LocalWP MCP is a Model Context Protocol server that gives AI assistants like Claude and Cursor direct, read-only access to your Local by Flywheel WordPress databases. Instead of guessing table structures or writing SQL queries blind, your AI can now see and understand your actual WordPress data.
 
-## 🚀 **Why This Changes Everything**
+## Why This Changes Everything
 
-### **Before MCP (AI Flying Blind)**
+### Before MCP (AI Flying Blind)
 
 ```sql
 -- AI guesses at table structure
 SELECT post_id, activity_meta FROM wp_user_activity
 WHERE user_id=123 AND activity_type='quiz';
--- ❌ Error: activity_meta column doesn't exist!
+-- Error: activity_meta column doesn't exist!
 ```
 
-### **After MCP (AI With X-Ray Vision)**
+### After MCP (AI With X-Ray Vision)
 
 ```sql
 -- AI sees actual table structure and relationships
@@ -51,18 +65,18 @@ SELECT ua.post_id, ua.activity_id, uam.activity_meta_key, uam.activity_meta_valu
 FROM wp_user_activity ua
 LEFT JOIN wp_user_activity_meta uam ON ua.activity_id = uam.activity_id
 WHERE ua.user_id=123 AND ua.activity_type='quiz';
--- ✅ Perfect query on first try!
+-- Perfect query on first try!
 ```
 
-## 📦 **Installation**
+## Installation
 
-### **Prerequisites**
+### Prerequisites
 
 - Local by Flywheel installed and running
 - Node.js 18+ installed
 - At least one active Local site
 
-### **Install LocalWP MCP Server**
+### Install LocalWP MCP Server
 
 ```bash
 # Global installation (recommended)
@@ -72,9 +86,9 @@ npm install -g @verygoodplugins/mcp-local-wp
 mcp-local-wp --help
 ```
 
-## 🔧 **Configuration**
+## Configuration
 
-### **1. Add to MCP Configuration**
+### Add to MCP Configuration
 
 **For Claude Desktop:**
 
@@ -105,7 +119,7 @@ mcp-local-wp --help
 }
 ```
 
-### **2. Using the Framework Helper**
+### Using the Framework Helper
 
 ```bash
 # Start LocalWP MCP server
@@ -118,9 +132,9 @@ mcp-local-wp --help
 ./.agent/scripts/localhost-helper.sh list-localwp
 ```
 
-## 🛠️ **Available Tools**
+## Available Tools
 
-### **mysql_query**
+### mysql_query
 
 Execute read-only SQL queries against your WordPress database.
 
@@ -145,7 +159,7 @@ SELECT * FROM wp_posts WHERE post_status = ? ORDER BY post_date DESC LIMIT ?;
 -- params: ["publish", "5"]
 ```
 
-### **mysql_schema**
+### mysql_schema
 
 Inspect database schema and structure.
 
@@ -159,9 +173,9 @@ mysql_schema()
 mysql_schema("wp_posts")
 ```
 
-## 🎯 **Real-World Use Cases**
+## Real-World Use Cases
 
-### **1. Plugin Development**
+### Plugin Development
 
 ```sql
 -- Understand LearnDash table structure
@@ -174,7 +188,7 @@ LEFT JOIN wp_learndash_user_activity_meta uam ON ua.activity_id = uam.activity_i
 WHERE ua.activity_type = 'quiz' AND ua.user_id = 123;
 ```
 
-### **2. WooCommerce Analysis**
+### WooCommerce Analysis
 
 ```sql
 -- Get order data with meta
@@ -186,7 +200,7 @@ AND pm.meta_key IN ('_order_total', '_billing_email')
 ORDER BY p.post_date DESC LIMIT 10;
 ```
 
-### **3. User Management**
+### User Management
 
 ```sql
 -- Find users with specific capabilities
@@ -197,7 +211,7 @@ WHERE um.meta_key = 'wp_capabilities'
 AND um.meta_value LIKE '%administrator%';
 ```
 
-### **4. Content Analysis**
+### Content Analysis
 
 ```sql
 -- Find posts with specific custom fields
@@ -209,9 +223,9 @@ AND pm.meta_key = '_featured_image'
 ORDER BY p.post_date DESC;
 ```
 
-## 🔍 **How It Works**
+## How It Works
 
-### **Automatic Detection**
+### Automatic Detection
 
 The MCP server automatically detects your active Local by Flywheel MySQL instance by:
 
@@ -220,7 +234,7 @@ The MCP server automatically detects your active Local by Flywheel MySQL instanc
 3. **Dynamic Connection**: Connects using the correct socket path automatically
 4. **Fallback Support**: Falls back to environment variables for custom setups
 
-### **Local Directory Structure**
+### Local Directory Structure
 
 ```text
 ~/Library/Application Support/Local/run/
@@ -232,7 +246,7 @@ The MCP server automatically detects your active Local by Flywheel MySQL instanc
     └── mysql/mysqld.sock
 ```
 
-## 🛡️ **Security Features**
+## Security Features
 
 - **Read-only operations**: Only SELECT/SHOW/DESCRIBE/EXPLAIN allowed
 - **Single statement**: Multiple statements blocked
@@ -240,9 +254,9 @@ The MCP server automatically detects your active Local by Flywheel MySQL instanc
 - **No external connections**: Prioritizes Unix socket connections
 - **Process isolation**: Runs in separate process from your applications
 
-## 🔧 **Troubleshooting**
+## Troubleshooting
 
-### **Common Issues**
+### Common Issues
 
 **"No active MySQL process found"**
 
@@ -262,21 +276,38 @@ The MCP server automatically detects your active Local by Flywheel MySQL instanc
 - Check if another process is using the MySQL port
 - Try restarting Local by Flywheel
 
-### **Debug Mode**
+### Debug Mode
 
 ```bash
 # Enable debug logging
 DEBUG=mcp-local-wp ./.agent/scripts/localhost-helper.sh start-mcp
 ```
 
-## 🎉 **Benefits for AI Development**
+## Benefits for AI Development
 
-✅ **No more schema guessing** - AI sees actual tables and columns
-✅ **Accurate JOIN operations** - AI understands table relationships
-✅ **Real data validation** - AI verifies data exists before suggesting queries
-✅ **Plugin-aware development** - AI adapts to any plugin's custom tables
-✅ **Instant debugging** - Complex queries become 5-second tasks
-✅ **Zero configuration** - Works automatically with Local by Flywheel
+- **No more schema guessing** - AI sees actual tables and columns
+- **Accurate JOIN operations** - AI understands table relationships
+- **Real data validation** - AI verifies data exists before suggesting queries
+- **Plugin-aware development** - AI adapts to any plugin's custom tables
+- **Instant debugging** - Complex queries become 5-second tasks
+- **Zero configuration** - Works automatically with Local by Flywheel
+
+## Related Subagents
+
+| Task | Subagent | Reason |
+|------|----------|--------|
+| Development & debugging | `@wp-dev` | This subagent is typically called from @wp-dev |
+| Content management | `@wp-admin` | Admin tasks, not database-level |
+| Fleet management | `@mainwp` | Multi-site operations |
+
+## Related Documentation
+
+| Topic | File |
+|-------|------|
+| WordPress development | `workflows/wp-dev.md` |
+| WordPress admin | `workflows/wp-admin.md` |
+| Local development | `localhost.md` |
+| MCP setup | `context7-mcp-setup.md` |
 
 ---
 
