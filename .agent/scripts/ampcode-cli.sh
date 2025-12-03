@@ -77,15 +77,13 @@ load_api_config() {
     fi
 
     # Fallback to config file
-    if [[ -f "$AMPCODE_API_CONFIG" ]]; then
-        if command -v jq >/dev/null 2>&1; then
-            local api_key
-            api_key=$(jq -r '.api_key // empty' "$AMPCODE_API_CONFIG" 2>/dev/null)
-            if [[ -n "$api_key" ]]; then
-                export AMPCODE_API_KEY="$api_key"
-                print_info "Loaded AmpCode API key from configuration"
-                return 0
-            fi
+    if [[ -f "$AMPCODE_API_CONFIG" ]] && command -v jq >/dev/null 2>&1; then
+        local api_key
+        api_key=$(jq -r '.api_key // empty' "$AMPCODE_API_CONFIG" 2>/dev/null)
+        if [[ -n "$api_key" ]]; then
+            export AMPCODE_API_KEY="$api_key"
+            print_info "Loaded AmpCode API key from configuration"
+            return 0
         fi
     fi
 
@@ -253,15 +251,13 @@ run_code_scan() {
         print_info "Results saved to: $output_file"
         
         # Show summary
-        if [[ -f "$output_file" && "$output_format" == "json" ]]; then
-            if command -v jq >/dev/null 2>&1; then
-                local issues
-                issues=$(jq '.issues | length // 0' "$output_file" 2>/dev/null || echo "0")
-                local suggestions
-                suggestions=$(jq '.suggestions | length // 0' "$output_file" 2>/dev/null || echo "0")
-                print_info "Issues found: $issues"
-                print_info "AI suggestions: $suggestions"
-            fi
+        if [[ -f "$output_file" && "$output_format" == "json" ]] && command -v jq >/dev/null 2>&1; then
+            local issues
+            issues=$(jq '.issues | length // 0' "$output_file" 2>/dev/null || echo "0")
+            local suggestions
+            suggestions=$(jq '.suggestions | length // 0' "$output_file" 2>/dev/null || echo "0")
+            print_info "Issues found: $issues"
+            print_info "AI suggestions: $suggestions"
         fi
         return 0
     else

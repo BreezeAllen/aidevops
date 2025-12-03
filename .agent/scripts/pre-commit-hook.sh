@@ -254,6 +254,7 @@ main() {
 
         exit 1
     fi
+    return 0
 }
 
 main "$@"

@@ -82,15 +82,13 @@ load_api_config() {
     fi
 
     # Fallback to config file
-    if [[ -f "$CONTINUE_API_CONFIG" ]]; then
-        if command -v jq >/dev/null 2>&1; then
-            local api_key
-            api_key=$(jq -r '.api_key // empty' "$CONTINUE_API_CONFIG" 2>/dev/null)
-            if [[ -n "$api_key" ]]; then
-                export CONTINUE_API_KEY="$api_key"
-                print_info "Loaded Continue.dev API key from configuration"
-                return 0
-            fi
+    if [[ -f "$CONTINUE_API_CONFIG" ]] && command -v jq >/dev/null 2>&1; then
+        local api_key
+        api_key=$(jq -r '.api_key // empty' "$CONTINUE_API_CONFIG" 2>/dev/null)
+        if [[ -n "$api_key" ]]; then
+            export CONTINUE_API_KEY="$api_key"
+            print_info "Loaded Continue.dev API key from configuration"
+            return 0
         fi
     fi
 
@@ -182,7 +180,8 @@ EOF
 
 # Start AI pair programming session
 start_pair_programming() {
-    local context_file="$1"
+    # context_file parameter reserved for future use
+    # local context_file="$1"
     
     print_header "Starting AI Pair Programming Session"
     

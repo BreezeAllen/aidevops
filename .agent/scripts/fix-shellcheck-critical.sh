@@ -130,18 +130,14 @@ fix_critical_shellcheck_in_file() {
     local sc2181_before
     sc2181_before=$(shellcheck "$file" 2>&1 | grep -c "SC2181" || echo "0")
     
-    if [[ $sc2155_before -gt 0 ]]; then
-        if fix_sc2155_in_file "$file"; then
-            sc2155_fixed=1
-            print_success "Fixed SC2155 issues in $file"
-        fi
+    if [[ $sc2155_before -gt 0 ]] && fix_sc2155_in_file "$file"; then
+        sc2155_fixed=1
+        print_success "Fixed SC2155 issues in $file"
     fi
     
-    if [[ $sc2181_before -gt 0 ]]; then
-        if fix_sc2181_in_file "$file"; then
-            sc2181_fixed=1
-            print_success "Fixed SC2181 issues in $file"
-        fi
+    if [[ $sc2181_before -gt 0 ]] && fix_sc2181_in_file "$file"; then
+        sc2181_fixed=1
+        print_success "Fixed SC2181 issues in $file"
     fi
     
     # Count issues after fixing

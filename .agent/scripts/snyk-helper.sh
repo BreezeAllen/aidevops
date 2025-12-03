@@ -229,12 +229,10 @@ install_snyk() {
             ;;
         "linux")
             print_info "Detected Linux - installing via npm or binary..."
-            if command -v npm &> /dev/null; then
-                # NOSONAR - npm scripts required for CLI binary installation
-                if npm install -g snyk; then
-                    print_success "$SUCCESS_INSTALL_COMPLETE"
-                    return 0
-                fi
+            # NOSONAR - npm scripts required for CLI binary installation
+            if command -v npm &> /dev/null && npm install -g snyk; then
+                print_success "$SUCCESS_INSTALL_COMPLETE"
+                return 0
             fi
             print_info "Downloading binary directly..."
             curl --compressed https://downloads.snyk.io/cli/stable/snyk-linux -o /usr/local/bin/snyk

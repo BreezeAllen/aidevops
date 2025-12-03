@@ -95,13 +95,11 @@ readonly HELP_SHOW_MESSAGE="Show this help"
     local content_type_count
     content_type_count=$(grep -c "Content-Type: application/json" "$file" 2>/dev/null || echo "0")
     if [[ $content_type_count -ge 1 ]] && ! grep -q "CONTENT_TYPE_JSON" "$file"; then
-        if ! grep -q "# Common message constants\|# Common constants" "$file"; then
-            if grep -q "readonly.*NC=" "$file"; then
-                sed -i '' '/readonly.*NC=/a\
+        if ! grep -q "# Common message constants\|# Common constants" "$file" && grep -q "readonly.*NC=" "$file"; then
+            sed -i '' '/readonly.*NC=/a\
 \
 # Common constants
 ' "$file"
-            fi
         fi
         
         sed -i '' '/# Common.*constants/a\

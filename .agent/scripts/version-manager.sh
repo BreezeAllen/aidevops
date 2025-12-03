@@ -247,6 +247,8 @@ create_github_release() {
 # Function to generate release notes
 generate_release_notes() {
     local version="$1"
+    # Parse version components (reserved for version-specific logic)
+    # shellcheck disable=SC2034
     local major minor patch
     IFS='.' read -r major minor patch <<< "$version"
 

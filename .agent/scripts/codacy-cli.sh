@@ -221,7 +221,8 @@ run_codacy_analysis() {
     local tool="$1"
     local output_format="${2:-sarif}"
     local output_file="${3:-codacy-results.sarif}"
-    local auto_fix="$4"
+    # auto_fix parameter reserved for future use
+    # local auto_fix="$4"
 
     print_header "Running Codacy Code Analysis"
 

@@ -157,22 +157,20 @@ apply_automatic_fixes() {
     
     # Fix shellcheck issues in new files
     for file in .agent/scripts/*.sh .agent/scripts/*.sh; do
-        if [[ -f "$file" ]]; then
-            # Check if file has been modified recently (within last hour)
-            if [[ $(find "$file" -mmin -60 2>/dev/null) ]]; then
-                print_info "Checking recent file: $file"
-                
-                # Apply common fixes
-                if grep -q "cd " "$file" && ! grep -q "cd .*||" "$file"; then
-                    print_info "Fixing cd commands in $file"
-                    # Use portable sed syntax (GNU vs BSD)
-                    if sed --version 2>/dev/null | grep -q GNU; then
-                        sed -i 's/cd \([^|]*\)$/cd \1 || exit/g' "$file"
-                    else
-                        sed -i '' 's/cd \([^|]*\)$/cd \1 || exit/g' "$file"
-                    fi
-                    ((fixes_applied++))
+        # Check if file exists and has been modified recently (within last hour)
+        if [[ -f "$file" ]] && [[ $(find "$file" -mmin -60 2>/dev/null) ]]; then
+            print_info "Checking recent file: $file"
+            
+            # Apply common fixes
+            if grep -q "cd " "$file" && ! grep -q "cd .*||" "$file"; then
+                print_info "Fixing cd commands in $file"
+                # Use portable sed syntax (GNU vs BSD)
+                if sed --version 2>/dev/null | grep -q GNU; then
+                    sed -i 's/cd \([^|]*\)$/cd \1 || exit/g' "$file"
+                else
+                    sed -i '' 's/cd \([^|]*\)$/cd \1 || exit/g' "$file"
                 fi
+                ((fixes_applied++))
             fi
         fi
     done

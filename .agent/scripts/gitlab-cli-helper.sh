@@ -165,11 +165,9 @@ get_project_info() {
 
     # Try to find project by name or ID
     local project_info
-    if project_info=$(glab api "projects?search=$project_identifier" --jq ".[] | select(.name_with_namespace == \"$project_identifier\" or .path == \"$project_identifier\" or .id == ($project_identifier | tonumber?))" 2>/dev/null); then
-        if [[ -n "$project_info" ]]; then
-            echo "$project_info" | jq -r '.id'
-            return 0
-        fi
+    if project_info=$(glab api "projects?search=$project_identifier" --jq ".[] | select(.name_with_namespace == \"$project_identifier\" or .path == \"$project_identifier\" or .id == ($project_identifier | tonumber?))" 2>/dev/null) && [[ -n "$project_info" ]]; then
+        echo "$project_info" | jq -r '.id'
+        return 0
     fi
 
     # If not found, try exact match

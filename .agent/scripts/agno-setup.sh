@@ -14,10 +14,10 @@ readonly YELLOW='\033[1;33m'
 readonly RED='\033[0;31m'
 readonly NC='\033[0m' # No Color
 
-print_info() { echo -e "${BLUE}[INFO]${NC} $command"; }
-print_success() { echo -e "${GREEN}[SUCCESS]${NC} $command"; }
-print_warning() { echo -e "${YELLOW}[WARNING]${NC} $command"; }
-print_error() { echo -e "${RED}[ERROR]${NC} $command" >&2; }
+print_info() { echo -e "${BLUE}[INFO]${NC} $1"; return 0; }
+print_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; return 0; }
+print_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; return 0; }
+print_error() { echo -e "${RED}[ERROR]${NC} $1" >&2; return 0; }
 
 # Configuration
 AGNO_DIR="$HOME/.aidevops/agno"
