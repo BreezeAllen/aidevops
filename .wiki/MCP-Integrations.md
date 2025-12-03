@@ -151,6 +151,7 @@ claude mcp add ahrefs npx @ahrefs/mcp@latest
 **API Key**: Get standard 40-char key from [Ahrefs API Dashboard](https://ahrefs.com/api) (JWT tokens don't work)
 
 **For OpenCode**: Use bash wrapper pattern (environment blocks don't expand variables):
+
 ```json
 {
   "ahrefs": {
@@ -604,6 +605,7 @@ This is a common issue with multiple potential causes:
 - Store as `AHREFS_API_KEY` in your env, pass as `API_KEY` to the MCP
 
 **Cause 3: OpenCode environment blocks don't expand variables**
+
 ```bash
 # This does NOT work in OpenCode - treats ${AHREFS_API_KEY} as literal:
 # "env": { "API_KEY": "${AHREFS_API_KEY}" }
@@ -613,6 +615,7 @@ This is a common issue with multiple potential causes:
 ```
 
 **Working OpenCode configuration:**
+
 ```json
 {
   "ahrefs": {
@@ -624,6 +627,7 @@ This is a common issue with multiple potential causes:
 ```
 
 **Verify API key works:**
+
 ```bash
 curl -H "Authorization: Bearer $AHREFS_API_KEY" https://apiv2.ahrefs.com/v2/subscription_info
 # Should return JSON with subscription info

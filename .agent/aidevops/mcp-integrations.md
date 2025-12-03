@@ -90,6 +90,7 @@ claude mcp add ahrefs npx @ahrefs/mcp@latest
 **Important**: The `@ahrefs/mcp` package expects `API_KEY` environment variable, not `AHREFS_API_KEY`.
 
 **For OpenCode** - use bash wrapper pattern (environment blocks don't expand variables):
+
 ```json
 {
   "ahrefs": {
