@@ -140,11 +140,28 @@ SEO analysis, backlink research, and keyword data.
 **Installation**:
 
 ```bash
-export AHREFS_API_KEY="your_api_key"
-claude mcp add ahrefs npx ahrefs-mcp@latest
+# Get standard 40-char API key from https://ahrefs.com/api
+# Note: JWT-style tokens do NOT work - use the standard API key
+export AHREFS_API_KEY="your_40_char_api_key"
+
+# For Claude Desktop:
+claude mcp add ahrefs npx @ahrefs/mcp@latest
 ```
 
-**API Key**: Get from [Ahrefs API Dashboard](https://ahrefs.com/api)
+**API Key**: Get standard 40-char key from [Ahrefs API Dashboard](https://ahrefs.com/api) (JWT tokens don't work)
+
+**For OpenCode**: Use bash wrapper pattern (environment blocks don't expand variables):
+```json
+{
+  "ahrefs": {
+    "type": "local",
+    "command": ["/bin/bash", "-c", "API_KEY=$AHREFS_API_KEY /opt/homebrew/bin/npx -y @ahrefs/mcp@latest"],
+    "enabled": true
+  }
+}
+```
+
+**Important**: The `@ahrefs/mcp` package expects `API_KEY` env var, not `AHREFS_API_KEY`.
 
 **Use Cases**:
 
@@ -378,9 +395,9 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
     },
     "ahrefs": {
       "command": "npx",
-      "args": ["ahrefs-mcp@latest"],
+      "args": ["-y", "@ahrefs/mcp@latest"],
       "env": {
-        "AHREFS_API_KEY": "${AHREFS_API_KEY}"
+        "API_KEY": "${AHREFS_API_KEY}"
       }
     },
     "perplexity": {
@@ -573,6 +590,47 @@ npx context7-mcp@latest search "React useState"
 
 ## Troubleshooting
 
+### Ahrefs MCP "Connection Closed" Error
+
+This is a common issue with multiple potential causes:
+
+**Cause 1: Wrong API key type**
+- JWT-style tokens (long strings with dots) do NOT work
+- Use standard 40-character API key from https://ahrefs.com/api
+- Verify: `echo $AHREFS_API_KEY | wc -c` should be ~40-45
+
+**Cause 2: Wrong environment variable name**
+- The `@ahrefs/mcp` package expects `API_KEY`, not `AHREFS_API_KEY`
+- Store as `AHREFS_API_KEY` in your env, pass as `API_KEY` to the MCP
+
+**Cause 3: OpenCode environment blocks don't expand variables**
+```bash
+# This does NOT work in OpenCode - treats ${AHREFS_API_KEY} as literal:
+# "env": { "API_KEY": "${AHREFS_API_KEY}" }
+
+# Solution: Use bash wrapper pattern:
+# "command": ["/bin/bash", "-c", "API_KEY=$AHREFS_API_KEY npx -y @ahrefs/mcp@latest"]
+```
+
+**Working OpenCode configuration:**
+```json
+{
+  "ahrefs": {
+    "type": "local",
+    "command": ["/bin/bash", "-c", "API_KEY=$AHREFS_API_KEY /opt/homebrew/bin/npx -y @ahrefs/mcp@latest"],
+    "enabled": true
+  }
+}
+```
+
+**Verify API key works:**
+```bash
+curl -H "Authorization: Bearer $AHREFS_API_KEY" https://apiv2.ahrefs.com/v2/subscription_info
+# Should return JSON with subscription info
+```
+
+---
+
 ### Common Issues
 
 **Problem**: MCP server not starting
@@ -602,7 +660,7 @@ echo $AHREFS_API_KEY
 source ~/.zshrc  # or ~/.bashrc
 
 # Test API connection
-curl -H "Authorization: Bearer $AHREFS_API_KEY" https://api.ahrefs.com/v3/ping
+curl -H "Authorization: Bearer $AHREFS_API_KEY" https://apiv2.ahrefs.com/v2/subscription_info
 ```
 
 ---

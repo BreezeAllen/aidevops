@@ -29,7 +29,7 @@ get_mcp_command() {
         "chrome-devtools") echo "npx chrome-devtools-mcp@latest" ;;
         "playwright") echo "npx playwright-mcp@latest" ;;
         "cloudflare-browser") echo "npx cloudflare-browser-rendering-mcp@latest" ;;
-        "ahrefs") echo "node ${SCRIPT_DIR}/../../.agent/scripts/ahrefs-mcp-wrapper.js" ;;
+        "ahrefs") echo "npx -y @ahrefs/mcp@latest" ;;
         "perplexity") echo "npx perplexity-mcp@latest" ;;
         "nextjs-devtools") echo "npx next-devtools-mcp@latest" ;;
         "google-search-console") echo "npx mcp-server-gsc@latest" ;;
@@ -114,8 +114,20 @@ install_mcp() {
             ;;
         "ahrefs")
             print_warning "Ahrefs MCP requires API key"
-            print_info "Set AHREFS_API_KEY environment variable"
-            print_info "Get your API key from: https://ahrefs.com/api"
+            print_info "Get your standard 40-char API key from: https://ahrefs.com/api"
+            print_info "Note: JWT-style tokens do NOT work - use the standard API key"
+            print_info ""
+            print_info "Store in ~/.config/aidevops/mcp-env.sh:"
+            print_info "  export AHREFS_API_KEY=\"your_40_char_key\""
+            print_info ""
+            print_info "For OpenCode, use bash wrapper pattern in opencode.json:"
+            print_info '  "ahrefs": {'
+            print_info '    "type": "local",'
+            print_info '    "command": ["/bin/bash", "-c", "API_KEY=\$AHREFS_API_KEY /opt/homebrew/bin/npx -y @ahrefs/mcp@latest"],'
+            print_info '    "enabled": true'
+            print_info '  }'
+            print_info ""
+            print_info "Note: The MCP expects API_KEY env var, not AHREFS_API_KEY"
             ;;
         "perplexity")
             print_warning "Perplexity MCP requires API key"

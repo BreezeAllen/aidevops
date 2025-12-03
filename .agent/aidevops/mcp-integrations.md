@@ -79,9 +79,25 @@ claude mcp add playwright npx playwright-mcp@latest
 ### **Ahrefs MCP**
 
 ```bash
-# Setup Ahrefs API integration
-export AHREFS_API_KEY="your_api_key_here"
-claude mcp add ahrefs npx ahrefs-mcp@latest
+# Get your standard 40-char API key (NOT JWT tokens) from https://ahrefs.com/api
+# Store in ~/.config/aidevops/mcp-env.sh:
+export AHREFS_API_KEY="your_40_char_api_key"
+
+# For Claude Desktop:
+claude mcp add ahrefs npx @ahrefs/mcp@latest
+```
+
+**Important**: The `@ahrefs/mcp` package expects `API_KEY` environment variable, not `AHREFS_API_KEY`.
+
+**For OpenCode** - use bash wrapper pattern (environment blocks don't expand variables):
+```json
+{
+  "ahrefs": {
+    "type": "local",
+    "command": ["/bin/bash", "-c", "API_KEY=$AHREFS_API_KEY /opt/homebrew/bin/npx -y @ahrefs/mcp@latest"],
+    "enabled": true
+  }
+}
 ```
 
 ### **Perplexity MCP**
@@ -163,14 +179,15 @@ claude mcp add google-search-console npx mcp-server-gsc@latest
 
 ### **Required API Keys**
 
-- **Ahrefs**: Get from [Ahrefs API Dashboard](https://ahrefs.com/api)
+- **Ahrefs**: Get standard 40-char key from [Ahrefs API Dashboard](https://ahrefs.com/api) (JWT tokens don't work)
 - **Perplexity**: Get from [Perplexity API](https://docs.perplexity.ai/)
 - **Cloudflare**: Account ID and API token from Cloudflare dashboard
 
 ### **Environment Variables**
 
 ```bash
-export AHREFS_API_KEY="your_ahrefs_key"
+# Ahrefs - store as AHREFS_API_KEY, MCP receives it as API_KEY via bash wrapper
+export AHREFS_API_KEY="your_40_char_ahrefs_key"
 export PERPLEXITY_API_KEY="your_perplexity_key"
 export CLOUDFLARE_ACCOUNT_ID="your_account_id"
 export CLOUDFLARE_API_TOKEN="your_api_token"

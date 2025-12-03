@@ -2,8 +2,24 @@
 /**
  * Ahrefs MCP Server Wrapper
  * 
- * This script wraps the official ahrefs-mcp package to patch schema validation errors.
- * Specifically, it fixes the missing 'items' property for array parameters in JSON Schema.
+ * DEPRECATED: This wrapper is no longer needed for most use cases.
+ * 
+ * For OpenCode, use the bash wrapper pattern instead:
+ * {
+ *   "ahrefs": {
+ *     "type": "local",
+ *     "command": ["/bin/bash", "-c", "API_KEY=$AHREFS_API_KEY /opt/homebrew/bin/npx -y @ahrefs/mcp@latest"],
+ *     "enabled": true
+ *   }
+ * }
+ * 
+ * Key facts:
+ * - Use standard 40-char API key from https://ahrefs.com/api (JWT tokens don't work)
+ * - The @ahrefs/mcp package expects API_KEY env var, not AHREFS_API_KEY
+ * - OpenCode environment blocks don't expand shell variables
+ * 
+ * This wrapper was originally created to patch JSON Schema validation errors,
+ * but the bash wrapper pattern is simpler and handles the env var issue.
  */
 
 const { spawn } = require('child_process');

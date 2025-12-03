@@ -278,6 +278,42 @@ brew install mcp-local-wp
 # Chrome DevTools MCP (auto-installed via npx)
 ```
 
+### OpenCode MCP Environment Variable Limitation
+
+**Important**: OpenCode's MCP `environment` blocks do NOT expand shell variables like `${VAR}` - they are treated as literal strings.
+
+**Solution**: Use bash wrapper pattern to expand variables at runtime:
+
+```json
+{
+  "mcp": {
+    "ahrefs": {
+      "type": "local",
+      "command": [
+        "/bin/bash",
+        "-c",
+        "API_KEY=$AHREFS_API_KEY /opt/homebrew/bin/npx -y @ahrefs/mcp@latest"
+      ],
+      "enabled": true
+    },
+    "hetzner": {
+      "type": "local",
+      "command": [
+        "/bin/bash",
+        "-c",
+        "HCLOUD_TOKEN=$HCLOUD_TOKEN_BRANDLIGHT /opt/homebrew/bin/hcloud-mcp-server"
+      ],
+      "enabled": true
+    }
+  }
+}
+```
+
+This pattern:
+1. Uses `/bin/bash -c` to run a shell command
+2. Sets the required env var by reading from your shell environment
+3. Then executes the MCP server with that variable set
+
 ## Troubleshooting
 
 ### MCPs Not Loading

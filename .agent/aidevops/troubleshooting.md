@@ -83,6 +83,57 @@ sudo apt-get install libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a lib
 
 ### **API-Based MCP Issues**
 
+#### **Issue: Ahrefs MCP "connection closed" error**
+
+This is a common issue with multiple potential causes:
+
+**Cause 1: Wrong API key type**
+```bash
+# JWT-style tokens (long, with dots) do NOT work
+# Use standard 40-character API key from https://ahrefs.com/api
+
+# Verify your key format - should be ~40 alphanumeric characters
+echo $AHREFS_API_KEY | wc -c  # Should be around 40-45
+```
+
+**Cause 2: Wrong environment variable name**
+```bash
+# The @ahrefs/mcp package expects API_KEY, not AHREFS_API_KEY
+# Store as AHREFS_API_KEY in your env, but pass as API_KEY to the MCP
+```
+
+**Cause 3: OpenCode environment blocks don't expand variables**
+```bash
+# This does NOT work in OpenCode - treats ${AHREFS_API_KEY} as literal string:
+# "env": { "API_KEY": "${AHREFS_API_KEY}" }
+
+# Solution: Use bash wrapper pattern to expand at runtime:
+# "command": ["/bin/bash", "-c", "API_KEY=$AHREFS_API_KEY npx -y @ahrefs/mcp@latest"]
+```
+
+**Working OpenCode configuration:**
+```json
+{
+  "ahrefs": {
+    "type": "local",
+    "command": [
+      "/bin/bash",
+      "-c",
+      "API_KEY=$AHREFS_API_KEY /opt/homebrew/bin/npx -y @ahrefs/mcp@latest"
+    ],
+    "enabled": true
+  }
+}
+```
+
+**Verify API key works:**
+```bash
+# Test the API directly
+curl -H "Authorization: Bearer $AHREFS_API_KEY" https://apiv2.ahrefs.com/v2/subscription_info
+
+# Should return JSON with subscription info, not an error
+```
+
 #### **Issue: Ahrefs API authentication failed**
 
 ```bash
