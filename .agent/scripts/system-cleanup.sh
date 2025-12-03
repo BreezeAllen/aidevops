@@ -62,6 +62,7 @@ log() {
         "WARN") color="$YELLOW" ;;
         "ERROR") color="$RED" ;;
         "DEBUG") color="$BLUE" ;;
+        *) color="$NC" ;;
     esac
     
     echo -e "${color}[${level}] ${message}${NC}"

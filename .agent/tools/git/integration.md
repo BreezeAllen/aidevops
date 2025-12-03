@@ -1,168 +1,95 @@
-# GitHub, GitLab, and Gitea CLI Integration
+# Git Platform CLI Integration
 
 <!-- AI-CONTEXT-START -->
 
 ## Quick Reference
 
-- **GitHub CLI Helper**: `.agent/scripts/github-cli-helper.sh` (requires `gh`, `jq`)
-- **GitLab CLI Helper**: `.agent/scripts/gitlab-cli-helper.sh` (requires `glab`, `jq`)
-- **Gitea CLI Helper**: `.agent/scripts/gitea-cli-helper.sh` (requires `tea`, `jq`, `curl`)
-- **Config Templates**: `configs/github-cli-config.json.txt`, `configs/gitlab-cli-config.json.txt`, `configs/gitea-cli-config.json.txt`
-- **Common Commands**: `list-accounts` | `list-repos` | `create-repo` | `list-issues` | `create-pr/mr`
-- **Install CLIs**: `brew install gh glab` or platform-specific installers
-- **Auth**: `gh auth login`, `glab auth login`, `tea login add`
-- **Features**: Multi-account support, repo/issue/PR/branch management
+- **GitHub**: `gh` - `brew install gh` - `gh auth login`
+- **GitLab**: `glab` - `brew install glab` - `glab auth login`
+- **Gitea**: `tea` - `go install code.gitea.io/tea@latest` - `tea login add`
+
+**Recommendation**: Use native CLIs directly. They handle auth securely and are well-maintained.
 <!-- AI-CONTEXT-END -->
 
 ## Overview
 
-Added comprehensive CLI helper scripts for managing GitHub, GitLab, and Gitea repositories through their respective CLI tools.
+Use the official CLI tools for each Git platform. They provide secure authentication, comprehensive features, and are actively maintained.
 
-## Scripts Created
+## GitHub CLI (`gh`)
 
-### GitHub CLI Helper
-
-- **File**: `providers/github-cli-helper.sh`
-- **Dependencies**: GitHub CLI (gh), jq
-- **Features**:
-  - Repository management (create, delete, list, get info)
-  - Issue management (create, close, list)
-  - Pull request management (create, merge, list)
-  - Branch management (create, list)
-  - Multi-account support
-
-### GitLab CLI Helper
-
-- **File**: `providers/gitlab-cli-helper.sh`
-- **Dependencies**: GitLab CLI (glab), jq
-- **Features**:
-  - Project management (create, delete, list, get details)
-  - Issue management (create, close, list)
-  - Merge request management (create, merge, list)
-  - Branch management (create, list)
-  - Multi-instance support (GitLab.com, self-hosted)
-
-### Gitea CLI Helper
-
-- **File**: `providers/gitea-cli-helper.sh`
-- **Dependencies**: Gitea CLI (tea), jq, curl
-- **Features**:
-  - Repository management (create, delete, list, get info)
-  - Issue management (create, close, list)
-  - Pull request management (create, merge, list)
-  - Branch management (create, list)
-  - Multi-instance support (Gitea.com, self-hosted)
-
-## Configuration Templates
-
-Created configuration templates:
-
-- `configs/github-cli-config.json.txt` - GitHub account configuration
-- `configs/gitlab-cli-config.json.txt` - GitLab instance configuration
-- `configs/gitea-cli-config.json.txt` - Gitea instance configuration
-
-## Main Script Integration
-
-Updated `.agent/scripts/servers-helper.sh` to include Git platforms:
-
-- Added github, gitlab, gitea as server options
-- Integrated CLI helper delegation
-- Updated help documentation
-
-## Documentation
-
-- **GitHub CLI Helper**: [docs/GITHUB-CLI.md](docs/GITHUB-CLI.md) - Detailed usage instructions.
-- **GitLab CLI Helper**: [docs/GITLAB-CLI.md](docs/GITLAB-CLI.md) - Detailed usage instructions.
-- **Gitea CLI Helper**: [docs/GITEA-CLI.md](docs/GITEA-CLI.md) - Detailed usage instructions.
-
-## Usage Examples
-
-### GitHub CLI Helper
+The official GitHub CLI. See [github-cli.md](github-cli.md) for detailed usage.
 
 ```bash
-# List configured accounts
-./providers/github-cli-helper.sh list-accounts
+# Install
+brew install gh
 
-# List repositories for account
-./providers/github-cli-helper.sh list-repos marcusquinn
+# Authenticate
+gh auth login
 
-# Create new repository
-./providers/github-cli-helper.sh create-repo marcusquinn my-project My awesome project public true
-
-# List issues
-./providers/github-cli-helper.sh list-issues marcusquinn my-repo open
-
-# Create pull request
-./providers/github-cli-helper.sh create-pr marcusquinn my-repo Fix bug main bugfix-branch
+# Common operations
+gh repo list
+gh issue list
+gh pr create
+gh release create v1.0.0 --generate-notes
 ```
 
-### GitLab CLI Helper
+## GitLab CLI (`glab`)
+
+The official GitLab CLI. See [gitlab-cli.md](gitlab-cli.md) for detailed usage.
 
 ```bash
-# List projects
-./providers/gitlab-cli-helper.sh list-projects marcusquinn
+# Install
+brew install glab
 
-# Create new project
-./providers/gitlab-cli-helper.sh create-project marcusquinn my-project My GitLab project private true
+# Authenticate
+glab auth login
 
-# List issues
-./providers/gitlab-cli-helper.sh list-issues marcusquinn my-project opened
-
-# Create merge request
-./providers/gitlab-cli-helper.sh create-mr marcusquinn my-project Fix feature fix-branch main
+# Common operations
+glab repo list
+glab issue list
+glab mr create
+glab release create v1.0.0
 ```
 
-### Gitea CLI Helper
+## Gitea CLI (`tea`)
+
+The official Gitea CLI. See [gitea-cli.md](gitea-cli.md) for detailed usage.
 
 ```bash
-# List repositories
-./providers/gitea-cli-helper.sh list-repos marcusquinn
+# Install
+go install code.gitea.io/tea@latest
 
-# Create new repository
-./providers/gitea-cli-helper.sh create-repo marcusquinn my-gitea-project My Gitea project private true
+# Authenticate
+tea login add
 
-# List issues
-./providers/gitea-cli-helper.sh list-issues marcusquinn my-repo open
-
-# Create pull request
-./providers/gitea-cli-helper.sh create-pr marcusquinn my-repo Fix bug bugfix-branch main
+# Common operations
+tea repos list
+tea issues list
+tea pulls create
+tea releases create v1.0.0
 ```
 
-## Setup Instructions
+## Multi-Platform Workflows
 
-1. Install required CLI tools:
-   - GitHub CLI: `brew install gh` or https://cli.github.com/manual/installation
-   - GitLab CLI: `brew install glab` or https://glab.readthedocs.io/en/latest/installation/
-   - Gitea CLI: `go install code.gitea.io/tea/cmd/tea@latest` or https://dl.gitea.io/tea/
+For repositories mirrored across platforms:
 
-2. Configure authentication:
-   - GitHub: `gh auth login`
-   - GitLab: `glab auth login`
-   - Gitea: `tea login add` or configure API token in config
+```bash
+# Push to multiple remotes
+git remote add github git@github.com:user/repo.git
+git remote add gitlab git@gitlab.com:user/repo.git
+git push github main
+git push gitlab main
 
-3. Copy and customize configuration templates:
+# Or use a push alias for all
+git remote add all git@github.com:user/repo.git
+git remote set-url --add --push all git@github.com:user/repo.git
+git remote set-url --add --push all git@gitlab.com:user/repo.git
+git push all main
+```
 
-   ```bash
-   cp configs/github-cli-config.json.txt configs/github-cli-config.json
-   cp configs/gitlab-cli-config.json.txt configs/gitlab-cli-config.json
-   cp configs/gitea-cli-config.json.txt configs/gitea-cli-config.json
-   ```
+## Authentication Best Practices
 
-4. Edit configuration files with your account details and tokens
-
-## Quality Standards
-
-All scripts pass ShellCheck validation and follow framework coding patterns:
-
-- Comprehensive error handling
-- Consistent command patterns
-- Multi-account support
-- Detailed help documentation
-- Secure credential management
-
-## Integration with Existing Framework
-
-- Integrated with main servers-helper.sh
-- Follows established provider patterns
-- Uses consistent configuration structure
-- Maintains framework quality standards
+1. **Use CLI auth** - Each CLI stores tokens securely in your keyring
+2. **Avoid env vars** - Only use `GITHUB_TOKEN` etc. when scripts require it
+3. **Get token from CLI** - Use `gh auth token` when needed
+4. **SSH for git** - Use SSH keys for git push/pull operations

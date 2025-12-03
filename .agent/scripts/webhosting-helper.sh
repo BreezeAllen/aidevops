@@ -216,6 +216,9 @@ EOF
     }
 EOF
             ;;
+        *)
+            # No additional configuration needed for other webapp types
+            ;;
     esac
     
     echo "}" >> "$nginx_conf"

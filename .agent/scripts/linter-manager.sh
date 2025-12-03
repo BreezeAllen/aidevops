@@ -355,7 +355,7 @@ install_security_linters() {
     if command -v secretlint &>/dev/null; then
         print_success "Secretlint already installed"
         ((success++))
-    elif npm install -g secretlint @secretlint/secretlint-rule-preset-recommend &>/dev/null; then
+    elif npm install -g --ignore-scripts secretlint @secretlint/secretlint-rule-preset-recommend &>/dev/null; then
         print_success "Secretlint installed via npm"
         ((success++))
     else
@@ -417,6 +417,9 @@ install_detected_linters() {
             "security")
                 install_security_linters
                 ((total_failures += $?))
+                ;;
+            *)
+                print_warning "Unknown language: $lang - skipping"
                 ;;
         esac
         echo ""

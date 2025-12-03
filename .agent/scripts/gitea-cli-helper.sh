@@ -261,6 +261,10 @@ create_repo() {
         "public")
             tea_args+=("--public")
             ;;
+        *)
+            # Default to public if not specified
+            tea_args+=("--public")
+            ;;
     esac
     
     if [[ "$auto_init" == "true" ]]; then

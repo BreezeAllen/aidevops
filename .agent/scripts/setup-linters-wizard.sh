@@ -246,23 +246,23 @@ install_selected_linters() {
 
     case "$quality_focus" in
         "Code style and formatting")
-            print_info "🎨 Focus: Code Style & Formatting"
+            print_info "Focus: Code Style & Formatting"
             print_info "Recommended: ESLint (JS), Pylint (Python), Stylelint (CSS)"
             ;;
         "Security and vulnerabilities")
-            print_info "🔒 Focus: Security & Vulnerabilities"
+            print_info "Focus: Security & Vulnerabilities"
             print_info "Recommended: Bandit (Python), Trivy (containers), ESLint security rules"
             ;;
         "Performance optimization")
-            print_info "⚡ Focus: Performance Optimization"
+            print_info "Focus: Performance Optimization"
             print_info "Recommended: Ruff (fast Python), ESLint performance rules"
             ;;
         "Maintainability and complexity")
-            print_info "🔧 Focus: Maintainability & Complexity"
+            print_info "Focus: Maintainability & Complexity"
             print_info "Recommended: Pylint (complexity), ESLint complexity rules"
             ;;
-        "All of the above")
-            print_info "🌟 Focus: Comprehensive Quality"
+        "All of the above"|*)
+            print_info "Focus: Comprehensive Quality"
             print_info "Recommended: Full CodeFactor suite for selected languages"
             ;;
     esac

@@ -884,6 +884,9 @@ main() {
             show_help
             return 0
             ;;
+        *)
+            # Other commands handled below after dependency check
+            ;;
     esac
     
     # Check dependencies for other commands

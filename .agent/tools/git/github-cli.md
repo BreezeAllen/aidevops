@@ -1,175 +1,209 @@
-# GitHub CLI Helper Documentation
+# GitHub CLI Guide
 
 <!-- AI-CONTEXT-START -->
 
 ## Quick Reference
 
-- **CLI Tool**: `gh` (GitHub CLI)
+- **CLI Tool**: `gh` (GitHub CLI) - the official GitHub CLI
 - **Install**: `brew install gh` (macOS) | `apt install gh` (Ubuntu)
-- **Auth**: `gh auth login`
-- **Config**: `configs/github-cli-config.json`
-- **Script**: `.agent/scripts/github-cli-helper.sh`
-- **Requires**: `jq` for JSON parsing
+- **Auth**: `gh auth login` (stores token in keyring)
+- **Status**: `gh auth status`
+- **Docs**: https://cli.github.com/manual
 
-**Commands**: `list-repos|create-repo|delete-repo|list-issues|create-issue|close-issue|list-prs|create-pr|merge-pr|list-branches|create-branch`
+**Common Commands**:
 
-**Usage**: `./providers/github-cli-helper.sh [command] [account] [args]`
+```bash
+gh repo list                    # List your repos
+gh repo create NAME             # Create repo
+gh issue list                   # List issues
+gh issue create                 # Create issue
+gh pr list                      # List PRs
+gh pr create                    # Create PR
+gh pr merge                     # Merge PR
+gh release create TAG           # Create release
+gh release list                 # List releases
+```
 
-**Multi-Account**: Use GH_TOKEN env var or config file accounts (primary, work, org)
+**Multi-Account**: `gh auth login` supports multiple accounts via keyring
 <!-- AI-CONTEXT-END -->
 
 ## Overview
 
-The GitHub CLI Helper provides a comprehensive interface for managing GitHub repositories, issues, pull requests, and branches directly from the command line. It leverages the `gh` CLI tool to offer a seamless experience for developers working with one or multiple GitHub accounts.
+The `gh` CLI is the official GitHub command-line tool. It handles authentication securely via your system keyring and provides comprehensive access to GitHub features. **Use `gh` directly rather than wrapper scripts.**
 
-## Prerequisites
-
-1. **GitHub CLI (`gh`)**: Must be installed.
-    - **macOS**: `brew install gh`
-    - **Ubuntu/Debian**: `sudo apt install gh`
-    - **Other**: See [GitHub CLI Installation](https://cli.github.com/manual/installation)
-2. **`jq`**: JSON processor (required for configuration parsing).
-3. **Authentication**: You must authenticate `gh` with your GitHub account(s).
-
-## Configuration
-
-The helper uses a JSON configuration file located at `configs/github-cli-config.json`.
-
-### Setup
-
-1. Copy the template:
-
-    ```bash
-    cp configs/github-cli-config.json.txt configs/github-cli-config.json
-    ```
-
-2. Edit `configs/github-cli-config.json` with your account details.
-
-### Multi-Account Support
-
-The configuration supports multiple accounts (e.g., `primary`, `work`, `org`).
-
-**1. Authenticate `gh`:**
-Due to `gh` limitations with multi-account switching, the helper relies on the configuration file to define the context. You should authenticate with your primary account:
+## Installation
 
 ```bash
+# macOS
+brew install gh
+
+# Ubuntu/Debian
+sudo apt install gh
+
+# Other platforms
+# See: https://cli.github.com/manual/installation
+```
+
+## Authentication
+
+```bash
+# Login (interactive - stores token in keyring)
 gh auth login
+
+# Check auth status
+gh auth status
+
+# Get current token (for scripts that need GITHUB_TOKEN)
+gh auth token
 ```
 
-*For true multi-account switching with `gh`, consider using environment variables (GH_TOKEN) or different hostnames if using GitHub Enterprise.*
+Authentication is stored securely in your system keyring. No need for `GITHUB_TOKEN` environment variable for normal `gh` operations.
 
-**2. Update `configs/github-cli-config.json`:**
-
-```json
-{
-  "accounts": {
-    "primary": {
-      "owner": "your-username",
-      "default_visibility": "public",
-      "description": "Personal Account"
-    },
-    "work": {
-      "owner": "work-org",
-      "default_visibility": "private",
-      "description": "Work Organization"
-    }
-  }
-}
-```
-
-## Usage
-
-Run the helper script:
+## Repository Management
 
 ```bash
-./providers/github-cli-helper.sh [command] [account] [arguments]
+# List your repositories
+gh repo list
+
+# Create new repository
+gh repo create my-repo --public --description "My project"
+
+# Clone a repository
+gh repo clone owner/repo
+
+# View repository info
+gh repo view owner/repo
+
+# Fork a repository
+gh repo fork owner/repo
 ```
 
-### Repository Management
+## Issue Management
 
-- **List Repositories**:
+```bash
+# List issues
+gh issue list
+gh issue list --state open --label bug
 
-    ```bash
-    ./providers/github-cli-helper.sh list-repos primary
-    ```
+# Create issue
+gh issue create --title "Bug report" --body "Description"
 
-- **Create Repository**:
+# View issue
+gh issue view 123
 
-    ```bash
-    # Usage: create-repo <account> <name> [desc] [visibility] [auto_init]
-    ./providers/github-cli-helper.sh create-repo primary my-new-repo "Description" private true
-    ```
+# Close issue
+gh issue close 123
+```
 
-- **Get Repository Details**:
+## Pull Request Management
 
-    ```bash
-    ./providers/github-cli-helper.sh get-repo primary my-new-repo
-    ```
+```bash
+# List PRs
+gh pr list
+gh pr list --state open
 
-- **Delete Repository**:
+# Create PR
+gh pr create --title "Feature X" --body "Description"
+gh pr create --fill  # Auto-fill from commits
 
-    ```bash
-    ./providers/github-cli-helper.sh delete-repo primary my-new-repo
-    ```
+# View PR
+gh pr view 123
 
-### Issue Management
+# Merge PR
+gh pr merge 123 --squash
+gh pr merge 123 --merge
+gh pr merge 123 --rebase
+```
 
-- **List Issues**:
+## Release Management
 
-    ```bash
-    ./providers/github-cli-helper.sh list-issues primary my-repo open
-    ```
+```bash
+# Create release with auto-generated notes
+gh release create v1.2.3 --generate-notes
 
-- **Create Issue**:
+# Create release with custom notes
+gh release create v1.2.3 --notes "Release notes here"
 
-    ```bash
-    ./providers/github-cli-helper.sh create-issue primary my-repo "Bug Title" "Issue description body"
-    ```
+# Create draft release
+gh release create v1.2.3 --draft --generate-notes
 
-- **Close Issue**:
+# List releases
+gh release list
 
-    ```bash
-    ./providers/github-cli-helper.sh close-issue primary my-repo 1
-    ```
+# View latest release
+gh release view
 
-### Pull Request Management
+# Download release assets
+gh release download v1.2.3
+```
 
-- **List Pull Requests**:
+## Workflow/Actions
 
-    ```bash
-    ./providers/github-cli-helper.sh list-prs primary my-repo open
-    ```
+```bash
+# List workflow runs
+gh run list
 
-- **Create Pull Request**:
+# View run details
+gh run view 123456
 
-    ```bash
-    # Usage: create-pr <account> <repo> <title> [base] [head] [body]
-    ./providers/github-cli-helper.sh create-pr primary my-repo "Feature X" main feature-branch "Description"
-    ```
+# Watch a running workflow
+gh run watch
 
-- **Merge Pull Request**:
+# Re-run failed jobs
+gh run rerun 123456 --failed
+```
 
-    ```bash
-    # Usage: merge-pr <account> <repo> <pr_number> [method]
-    ./providers/github-cli-helper.sh merge-pr primary my-repo 1 squash
-    ```
+## API Access
 
-### Branch Management
+```bash
+# Make API calls directly
+gh api repos/owner/repo
+gh api repos/owner/repo/issues
 
-- **List Branches**:
+# Create via API
+gh api repos/owner/repo/issues -f title="Bug" -f body="Details"
+```
 
-    ```bash
-    ./providers/github-cli-helper.sh list-branches primary my-repo
-    ```
+## Multi-Account Support
 
-- **Create Branch**:
+The `gh` CLI supports multiple accounts:
 
-    ```bash
-    # Usage: create-branch <account> <repo> <new_branch> [source_branch]
-    ./providers/github-cli-helper.sh create-branch primary my-repo feature-branch main
-    ```
+```bash
+# Login to additional account
+gh auth login
+
+# Switch between accounts
+gh auth switch
+
+# List authenticated accounts
+gh auth status
+```
+
+## Environment Variables
+
+For scripts that need a token:
+
+```bash
+# Get token from gh auth
+export GITHUB_TOKEN=$(gh auth token)
+
+# Or use GH_TOKEN (preferred by gh)
+export GH_TOKEN=$(gh auth token)
+```
 
 ## Troubleshooting
 
-- **"GitHub CLI is not authenticated"**: Run `gh auth status` to check your login status.
-- **"Owner not configured"**: Check `configs/github-cli-config.json` and ensure the `owner` field is set correctly.
+| Issue | Solution |
+|-------|----------|
+| "not logged in" | Run `gh auth login` |
+| "token expired" | Run `gh auth refresh` |
+| Wrong account | Run `gh auth switch` |
+| Need token for script | Use `$(gh auth token)` |
+
+## Best Practices
+
+1. **Use `gh` directly** - No wrapper scripts needed
+2. **Use keyring auth** - More secure than env vars
+3. **Use `--generate-notes`** - Auto-generate release notes from commits/PRs
+4. **Use `gh api`** - For advanced GitHub API access
+5. **Use `gh pr create --fill`** - Auto-fill PR details from commits
